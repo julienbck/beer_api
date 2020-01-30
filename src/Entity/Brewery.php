@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -50,6 +52,16 @@ class Brewery
      * @ORM\Column(type="datetime")
      */
     private $updatedAt;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Beer", mappedBy="brewery")
+     */
+    private $beers;
+
+    public function __construct()
+    {
+        $this->beers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -136,6 +148,37 @@ class Brewery
     public function setUpdatedAt(\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Beer[]
+     */
+    public function getBeers(): Collection
+    {
+        return $this->beers;
+    }
+
+    public function addBeer(Beer $beer): self
+    {
+        if (!$this->beers->contains($beer)) {
+            $this->beers[] = $beer;
+            $beer->setBrewery($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBeer(Beer $beer): self
+    {
+        if ($this->beers->contains($beer)) {
+            $this->beers->removeElement($beer);
+            // set the owning side to null (unless already changed)
+            if ($beer->getBrewery() === $this) {
+                $beer->setBrewery(null);
+            }
+        }
 
         return $this;
     }
