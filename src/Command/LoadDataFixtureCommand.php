@@ -63,6 +63,8 @@ class LoadDataFixtureCommand extends Command
 
             $this->parseCsvAndHydrateBreweryEntity($path);
             $totalBreweryLoaded = $this->loadBreweryInDatabase();
+            $this->hydrateBeer();
+            $totalBeerLoaded = $this->loadBeerInDatabase();
         }
 
         $totalBrewery = $totalBreweryLoaded ? $totalBreweryLoaded : 0;
@@ -143,6 +145,69 @@ class LoadDataFixtureCommand extends Command
         return $counterFlush;
     }
 
+    private function hydrateBeer()
+    {
+        $this->breweries = $this->em->getRepository(Brewery::class)->findAll();
+        foreach ($this->arrayAssociated as $data) {
+            $brewery = array_filter(
+                $this->breweries,
+                function ($e) use ($data) {
+                    return $e->getId() == $data['brewery_id'];
+                }
+            );
+
+            $beer = new Beer();
+            $beer
+                ->setId($data['id'])
+                ->setName($data['Name'])
+                ->setIbu($data['International Bitterness Units'])
+                ->setAbv($data['Alcohol By Volume'])
+                ->setBrewery(reset($brewery))
+                ->setCreatedAt(new \DateTime())
+                ->setUpdatedAt(new \DateTime());
+
+            $this->beers[] = $beer;
+        }
+
+        $this->removeDuplicatedBeer();
+    }
+
+
+    private function loadBeerInDatabase()
+    {
+        $this->io->write('Start load beer in database', true);
+        $this->io->progressStart(count($this->beers));
+        $counterFlush = 0;
+        foreach ($this->beers as $beer) {
+            $this->em->persist($beer);
+            $metadata = $this->em->getClassMetaData(get_class($beer));
+            $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
+            $metadata->setIdGenerator(new AssignedGenerator());
+            if($counterFlush % 50  === 0) {
+                $this->em->flush();
+                $this->em->clear(Beer::class);
+            }
+            $counterFlush++;
+            $this->io->progressAdvance();
+        }
+
+        $this->em->flush();
+        $this->em->clear(Beer::class);
+
+        $this->io->progressFinish();
+        $this->io->write('End load brewery in database', true);
+
+        return $counterFlush;
+    }
+
+    private function removeDuplicatedBeer()
+    {
+        $cleanedBeerArray = [];
+        foreach ($this->beers as $beer) {
+            $cleanedBeerArray[$beer->getId()] = $beer;
+        }
+        $this->beers = $cleanedBeerArray;
+    }
 
     private function removeDuplicatedBrewery()
     {
