@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,9 +33,26 @@ class Style
      */
     private $updatedAt;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Beer", mappedBy="style")
+     */
+    private $beers;
+
+    public function __construct()
+    {
+        $this->beers = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getName(): ?string
@@ -68,6 +87,37 @@ class Style
     public function setUpdatedAt(\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Beer[]
+     */
+    public function getBeers(): Collection
+    {
+        return $this->beers;
+    }
+
+    public function addBeer(Beer $beer): self
+    {
+        if (!$this->beers->contains($beer)) {
+            $this->beers[] = $beer;
+            $beer->setStyle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBeer(Beer $beer): self
+    {
+        if ($this->beers->contains($beer)) {
+            $this->beers->removeElement($beer);
+            // set the owning side to null (unless already changed)
+            if ($beer->getStyle() === $this) {
+                $beer->setStyle(null);
+            }
+        }
 
         return $this;
     }

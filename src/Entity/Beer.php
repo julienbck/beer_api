@@ -46,6 +46,11 @@ class Beer
      */
     private $updatedAt;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Style", inversedBy="beers")
+     */
+    private $style;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -126,6 +131,18 @@ class Beer
     public function setUpdatedAt(\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getStyle(): ?Style
+    {
+        return $this->style;
+    }
+
+    public function setStyle(?Style $style): self
+    {
+        $this->style = $style;
 
         return $this;
     }
