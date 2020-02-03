@@ -5,33 +5,52 @@ namespace App\Controller\Rest;
 
 
 use App\Entity\Style;
+use JMS\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class StyleController extends AbstractRestController
 {
+
+    public function __construct(SerializerInterface $serializer)
+    {
+        parent::__construct($serializer);
+    }
+
     /**
      * @Route("/styles", name="get_styles", methods={"GET"})
+     * @param Request $request
+     * @return Response
      */
-    public function getCollection() :JsonResponse
+    public function getCollection(Request $request): Response
     {
-        $styles = $this->getCollectionEntity(Style::class);
-        $json = $this->serializer->serialize($styles, 'json');
+        $results = $this->getCollectionEntity(Style::class, $request->query, ['style-collection']);
 
-        dump($json); die;
+        if (empty($results['data'])) {
+            return new Response(null, 204);
+        }
+
+        $response = new Response($results['data'], 200);
+        $response->headers->set('totalHits', $results['totalHits']);
+        $response->headers->set('totalPage', $results['totalPage']);
+        $response->headers->set('nextPage', $results['nextPage']);
+
+        return $response;
     }
 
     /**
      * @Route("/styles/{id}", name="get_style", methods={"GET"})
      * @param Request $request
-     * @return JsonResponse
+     * @return Response
      */
-    public function getOne(Request $request) :JsonResponse
+    public function getOne(Request $request) :Response
     {
         $style =  $this->getOneEntity(Style::class, $request->get('id'));
-        $json = $this->serializer->serialize($style, 'json');
-        dump($json); die;
+        $json = $this->serialize($style, ['style-collection']);
+
+        return new Response($json, 200);
     }
 
     /**

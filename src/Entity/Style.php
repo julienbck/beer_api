@@ -17,28 +17,28 @@ class Style
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @JMS\Expose
-     * @JMS\Groups({"beer-collection", "style-collection"})
+     * @JMS\Groups({"beer-collection", "style-collection", "beer-details"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @JMS\Expose
-     * @JMS\Groups({"beer-collection", "style-collection"})
+     * @JMS\Groups({"beer-collection", "style-collection", "beer-details"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="datetime")
      * @JMS\Expose
-     * @JMS\Groups({"style-collection"})
+     * @JMS\Groups({"style-collection", "beer-details"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
      * @JMS\Expose
-     * @JMS\Groups({"style-collection"})
+     * @JMS\Groups({"style-collection", "beer-details"})
      */
     private $updatedAt;
 
