@@ -11,6 +11,7 @@ use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class AbstractRestController extends AbstractController
 {
@@ -61,12 +62,26 @@ class AbstractRestController extends AbstractController
 
     public function post(Request $request): JsonResponse
     {
-        // TODO: Implement post() method.
     }
 
     public function patch(Request $request): JsonResponse
     {
-        // TODO: Implement patch() method.
+    }
+
+    public function delete($className, $idRessource)
+    {
+        $result = $this->getDoctrine()->getRepository($className)->find($idRessource);
+
+        if (empty($result)) {
+            return new Response('Not found', 404);
+        }
+
+        if ($result) {
+            $this->getDoctrine()->getManager()->remove($result);
+            $this->getDoctrine()->getManager()->flush();
+
+            return new Response(null, 204);
+        }
     }
 
     public function serialize($data, $context)
