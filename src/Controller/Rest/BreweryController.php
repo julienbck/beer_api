@@ -15,9 +15,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class BreweryController extends AbstractRestController
 {
-
-    protected $serializer;
-
     public function __construct(SerializerInterface $serializer)
     {
         parent::__construct($serializer);
@@ -78,8 +75,21 @@ class BreweryController extends AbstractRestController
 
     }
 
-    public function serializeJsonFormat($data, $context)
+    /**
+     * @Route("/breweries/{id}", name="delete_brewery", methods={"DELETE"}, requirements={"id"="\d+"})
+     * @param Request $request
+     * @return Response
+     */
+    public function deleteOne(Request $request):Response
     {
-        return $this->serializer->serialize($data, 'json', SerializationContext::create()->setGroups($context));
+        $idRessource = $request->get('id') ? $request->get('id') : null;
+
+        if (empty($idRessource)) {
+            new Response(null, 404);
+        }
+
+        $resp = $this->delete(Brewery::class, $idRessource);
+
+        return $resp;
     }
 }

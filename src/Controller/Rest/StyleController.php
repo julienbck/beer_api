@@ -72,4 +72,22 @@ class StyleController extends AbstractRestController
     {
 
     }
+
+    /**
+     * @Route("/styles/{id}", name="delete_style", methods={"DELETE"}, requirements={"id"="\d+"})
+     * @param Request $request
+     * @return Response
+     */
+    public function deleteOne(Request $request):Response
+    {
+        $idRessource = $request->get('id') ? $request->get('id') : null;
+
+        if (empty($idRessource)) {
+            new Response(null, 404);
+        }
+
+        $resp = $this->delete(Style::class, $idRessource);
+
+        return $resp;
+    }
 }

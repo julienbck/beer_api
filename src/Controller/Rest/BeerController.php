@@ -15,8 +15,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class BeerController extends AbstractRestController
 {
-    protected $serializer;
-
     public function __construct(SerializerInterface $serializer)
     {
         parent::__construct($serializer);
@@ -44,13 +42,19 @@ class BeerController extends AbstractRestController
     }
 
     /**
-     * @Route("/beers/{id}", name="get_beer", methods={"GET"})
+     * @Route("/beers/{id}", name="get_beer", methods={"GET"}, requirements={"id"="\d+"})
      * @param Request $request
      * @return Response
      */
     public function getOne(Request $request): Response
     {
-        $beer = $this->getOneEntity(Beer::class, $request->get('id'));
+        $idRessource = $request->get('id') ? $request->get('id') : null;
+
+        $beer = $this->getOneEntity(Beer::class, $idRessource);
+
+        if (empty($beer)) {
+            return new Response(sprintf('Not beer found with id: %d', $idRessource), 404);
+        }
         $json = $this->serialize($beer, ['beer-details']);
 
         return new Response($json, 200);
@@ -67,7 +71,7 @@ class BeerController extends AbstractRestController
     }
 
     /**
-     * @Route("/beers/{id}", name="patch_beer", methods={"PATCH"})
+     * @Route("/beers/{id}", name="patch_beer", methods={"PATCH"}, requirements={"id"="\d+"})
      * @param Request $request
      * @return JsonResponse
      */
@@ -76,8 +80,21 @@ class BeerController extends AbstractRestController
 
     }
 
-    public function serializeJsonFormat($data, $context)
+    /**
+     * @Route("/beers/{id}", name="delete_beer", methods={"DELETE"}, requirements={"id"="\d+"})
+     * @param Request $request
+     * @return Response
+     */
+    public function deleteOne(Request $request):Response
     {
-        return $this->serializer->serialize($data, 'json', SerializationContext::create()->setGroups($context));
+        $idRessource = $request->get('id') ? $request->get('id') : null;
+
+        if (empty($idRessource)) {
+            new Response(null, 404);
+        }
+
+        $resp = $this->delete(Beer::class, $idRessource);
+
+        return $resp;
     }
 }
