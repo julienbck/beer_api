@@ -15,15 +15,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class BeerController extends AbstractRestController
 {
-    protected $beerRepository;
-
     protected $serializer;
 
-    public function __construct(BeerRepository $beerRepository, SerializerInterface $serializer)
+    public function __construct(SerializerInterface $serializer)
     {
-        $this->beerRepository = $beerRepository;
-
-        $this->serializer = $serializer;
+        parent::__construct($serializer);
     }
 
     /**
@@ -33,25 +29,29 @@ class BeerController extends AbstractRestController
      */
     public function getCollection(Request $request): Response
     {
-        $beers = $this->getCollectionEntity(Beer::class, $request->query, ['beer-collection']);
+        $results = $this->getCollectionEntity(Beer::class, $request->query, ['beer-collection']);
 
-        if (empty($beers)) {
+        if (empty($results['data'])) {
             return new Response(null, 204);
         }
 
-        $json = $this->serializeJsonFormat($beers, ['beer-collection']);
+        $response = new Response($results['data'], 200);
+        $response->headers->set('totalHits', $results['totalHits']);
+        $response->headers->set('totalPage', $results['totalPage']);
+        $response->headers->set('nextPage', $results['nextPage']);
 
-        return new Response($json, 200);
+        return $response;
     }
 
     /**
      * @Route("/beers/{id}", name="get_beer", methods={"GET"})
      * @param Request $request
+     * @return Response
      */
-    public function getOne(Request $request)
+    public function getOne(Request $request): Response
     {
         $beer = $this->getOneEntity(Beer::class, $request->get('id'));
-        $json = $this->serializer->serialize($beer, 'json');
+        $json = $this->serialize($beer, ['beer-details']);
 
         return new Response($json, 200);
     }

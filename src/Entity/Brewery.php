@@ -18,56 +18,56 @@ class Brewery
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @JMS\Expose
-     * @JMS\Groups({"beer-collection", "brewery-collection"})
+     * @JMS\Groups({"beer-collection", "brewery-collection", "beer-details"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @JMS\Expose
-     * @JMS\Groups({"beer-collection", "brewery-collection"})
+     * @JMS\Groups({"beer-collection", "brewery-collection", "beer-details"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @JMS\Expose
-     * @JMS\Groups({"brewery-collection"})
+     * @JMS\Groups({"brewery-collection", "beer-details"})
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @JMS\Expose
-     * @JMS\Groups({"brewery-collection"})
+     * @JMS\Groups({"brewery-collection", "beer-details"})
      */
     private $city;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @JMS\Expose
-     * @JMS\Groups({"brewery-collection"})
+     * @JMS\Groups({"brewery-collection", "beer-details"})
      */
     private $postalCode;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @JMS\Expose
-     * @JMS\Groups({"brewery-collection"})
+     * @JMS\Groups({"brewery-collection", "beer-details"})
      */
     private $country;
 
     /**
      * @ORM\Column(type="datetime")
      * @JMS\Expose
-     * @JMS\Groups({"brewery-collection"})
+     * @JMS\Groups({"brewery-collection", "beer-details"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
      * @JMS\Expose
-     * @JMS\Groups({"brewery-collection"})
+     * @JMS\Groups({"brewery-collection", "beer-details"})
      */
     private $updatedAt;
 

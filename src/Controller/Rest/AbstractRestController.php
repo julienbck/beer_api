@@ -25,9 +25,10 @@ class AbstractRestController extends AbstractController
     /**
      * @param string $className
      * @param $requestQuery
-     * @return string
+     * @param array $context
+     * @return array
      */
-    public function getCollectionEntity(string $className, $requestQuery)
+    public function getCollectionEntity(string $className, $requestQuery, array $context)
     {
         $page = 1;
         $limit = 10;
@@ -45,7 +46,12 @@ class AbstractRestController extends AbstractController
         $pagerfanta->setMaxPerPage($limit);
         $pagerfanta->setCurrentPage($page);
 
-        return iterator_to_array($pagerfanta->getCurrentPageResults());
+        return [
+            'data' => $this->serialize(iterator_to_array($pagerfanta->getCurrentPageResults()), $context),
+            'totalPage' => $pagerfanta->getNbPages(),
+            'totalHits' => $pagerfanta->getNbResults(),
+            'nextPage' => $pagerfanta->getNextPage()
+            ];
     }
 
     public function getOneEntity($className, $id)
@@ -61,5 +67,10 @@ class AbstractRestController extends AbstractController
     public function patch(Request $request): JsonResponse
     {
         // TODO: Implement patch() method.
+    }
+
+    public function serialize($data, $context)
+    {
+        return $this->serializer->serialize($data, 'json', SerializationContext::create()->setGroups($context));
     }
 }

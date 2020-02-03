@@ -26,7 +26,7 @@ class StyleRepository extends ServiceEntityRepository
         $qb
             ->orderBy('s.name', 'ASC');
 
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery();
     }
 
     public function getOneById(int $id): ?Style
