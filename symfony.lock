@@ -75,67 +75,8 @@
     "doctrine/reflection": {
         "version": "v1.1.0"
     },
-    "hoa/compiler": {
-        "version": "3.17.08.08"
-    },
-    "hoa/consistency": {
-        "version": "1.17.05.02"
-    },
-    "hoa/event": {
-        "version": "1.17.01.13"
-    },
-    "hoa/exception": {
-        "version": "1.17.01.16"
-    },
-    "hoa/file": {
-        "version": "1.17.07.11"
-    },
-    "hoa/iterator": {
-        "version": "2.17.01.10"
-    },
-    "hoa/math": {
-        "version": "1.17.05.16"
-    },
-    "hoa/protocol": {
-        "version": "1.17.01.14"
-    },
-    "hoa/regex": {
-        "version": "1.17.01.13"
-    },
-    "hoa/stream": {
-        "version": "1.17.02.21"
-    },
-    "hoa/ustring": {
-        "version": "4.17.01.16"
-    },
-    "hoa/visitor": {
-        "version": "2.17.01.16"
-    },
-    "hoa/zformat": {
-        "version": "1.17.01.10"
-    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
-    },
-    "jms/metadata": {
-        "version": "2.1.0"
-    },
-    "jms/serializer": {
-        "version": "3.4.0"
-    },
-    "jms/serializer-bundle": {
-        "version": "3.0",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "3.0",
-            "ref": "384cec52df45f3bfd46a09930d6960a58872b268"
-        },
-        "files": [
-            "config/packages/dev/jms_serializer.yaml",
-            "config/packages/jms_serializer.yaml",
-            "config/packages/prod/jms_serializer.yaml"
-        ]
     },
     "nikic/php-parser": {
         "version": "v4.3.0"
@@ -151,6 +92,15 @@
     },
     "php": {
         "version": "7.3"
+    },
+    "phpdocumentor/reflection-common": {
+        "version": "2.0.0"
+    },
+    "phpdocumentor/reflection-docblock": {
+        "version": "4.3.4"
+    },
+    "phpdocumentor/type-resolver": {
+        "version": "1.0.1"
     },
     "psr/cache": {
         "version": "1.0.1"
@@ -234,6 +184,9 @@
             ".env"
         ]
     },
+    "symfony/form": {
+        "version": "v4.4.4"
+    },
     "symfony/framework-bundle": {
         "version": "4.4",
         "recipe": {
@@ -263,6 +216,9 @@
     "symfony/inflector": {
         "version": "v4.4.4"
     },
+    "symfony/intl": {
+        "version": "v4.4.4"
+    },
     "symfony/maker-bundle": {
         "version": "1.0",
         "recipe": {
@@ -275,8 +231,14 @@
     "symfony/mime": {
         "version": "v4.4.4"
     },
+    "symfony/options-resolver": {
+        "version": "v4.4.4"
+    },
     "symfony/orm-pack": {
         "version": "v1.0.7"
+    },
+    "symfony/polyfill-intl-icu": {
+        "version": "v1.13.1"
     },
     "symfony/polyfill-intl-idn": {
         "version": "v1.13.1"
@@ -293,6 +255,9 @@
     "symfony/property-access": {
         "version": "v4.4.4"
     },
+    "symfony/property-info": {
+        "version": "v4.4.4"
+    },
     "symfony/routing": {
         "version": "4.2",
         "recipe": {
@@ -306,6 +271,12 @@
             "config/packages/routing.yaml",
             "config/routes.yaml"
         ]
+    },
+    "symfony/serializer": {
+        "version": "v4.4.4"
+    },
+    "symfony/serializer-pack": {
+        "version": "v1.0.2"
     },
     "symfony/service-contracts": {
         "version": "v2.0.1"
@@ -346,6 +317,19 @@
             "templates/base.html.twig"
         ]
     },
+    "symfony/validator": {
+        "version": "4.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.3",
+            "ref": "d902da3e4952f18d3bf05aab29512eb61cabd869"
+        },
+        "files": [
+            "config/packages/test/validator.yaml",
+            "config/packages/validator.yaml"
+        ]
+    },
     "symfony/var-dumper": {
         "version": "v4.4.4"
     },
@@ -357,6 +341,9 @@
     },
     "twig/twig": {
         "version": "v3.0.1"
+    },
+    "webmozart/assert": {
+        "version": "1.6.0"
     },
     "white-october/pagerfanta-bundle": {
         "version": "v1.3.2"

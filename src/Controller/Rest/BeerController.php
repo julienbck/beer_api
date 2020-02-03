@@ -4,26 +4,37 @@
 namespace App\Controller\Rest;
 
 
+use App\DTO\Assembler\BeerAssembler;
+use App\DTO\BeerDTO;
 use App\Entity\Beer;
+use App\Entity\Brewery;
+use App\Form\BeerType;
 use App\Repository\BeerRepository;
-use JMS\Serializer\SerializationContext;
-use JMS\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class BeerController extends AbstractRestController
 {
-    protected $beerRepository;
+    /**
+     * @var BeerAssembler
+     */
+    private $beerAssembler;
 
-    protected $serializer;
-
-    public function __construct(BeerRepository $beerRepository, SerializerInterface $serializer)
+    /**
+     * BeerController constructor.
+     * @param SerializerInterface $serializer
+     * @param ValidatorInterface $validator
+     * @param BeerAssembler $beerAssembler
+     */
+    public function __construct(SerializerInterface $serializer, ValidatorInterface $validator, BeerAssembler $beerAssembler)
     {
-        $this->beerRepository = $beerRepository;
+        parent::__construct($serializer, $validator);
 
-        $this->serializer = $serializer;
+        $this->beerAssembler = $beerAssembler;
     }
 
     /**
@@ -33,25 +44,35 @@ class BeerController extends AbstractRestController
      */
     public function getCollection(Request $request): Response
     {
-        $beers = $this->getCollectionEntity(Beer::class, $request->query, ['beer-collection']);
+        $results = $this->getCollectionEntity(Beer::class, $request->query, ['beer-collection']);
 
-        if (empty($beers)) {
+        if (empty($results['data'])) {
             return new Response(null, 204);
         }
 
-        $json = $this->serializeJsonFormat($beers, ['beer-collection']);
+        $response = new Response($results['data'], 200);
+        $response->headers->set('totalHits', $results['totalHits']);
+        $response->headers->set('totalPage', $results['totalPage']);
+        $response->headers->set('nextPage', $results['nextPage']);
 
-        return new Response($json, 200);
+        return $response;
     }
 
     /**
-     * @Route("/beers/{id}", name="get_beer", methods={"GET"})
+     * @Route("/beers/{id}", name="get_beer", methods={"GET"}, requirements={"id"="\d+"})
      * @param Request $request
+     * @return Response
      */
-    public function getOne(Request $request)
+    public function getOne(Request $request): Response
     {
-        $beer = $this->getOneEntity(Beer::class, $request->get('id'));
-        $json = $this->serializer->serialize($beer, 'json');
+        $idRessource = $request->get('id') ? $request->get('id') : null;
+
+        $beer = $this->getOneEntity(Beer::class, $idRessource);
+
+        if (empty($beer)) {
+            return new Response(sprintf('Not beer found with id: %d', $idRessource), 404);
+        }
+        $json = $this->serialize($beer, ['beer-details']);
 
         return new Response($json, 200);
     }
@@ -61,13 +82,15 @@ class BeerController extends AbstractRestController
      * @param Request $request
      * @return JsonResponse
      */
-    public function post(Request $request) :JsonResponse
+    public function post(Request $request) :Response
     {
+            $response = $this->postEntity($request->getContent(), BeerDTO::class, $this->beerAssembler);
 
+            return $response;
     }
 
     /**
-     * @Route("/beers/{id}", name="patch_beer", methods={"PATCH"})
+     * @Route("/beers/{id}", name="patch_beer", methods={"PATCH"}, requirements={"id"="\d+"})
      * @param Request $request
      * @return JsonResponse
      */
@@ -76,8 +99,21 @@ class BeerController extends AbstractRestController
 
     }
 
-    public function serializeJsonFormat($data, $context)
+    /**
+     * @Route("/beers/{id}", name="delete_beer", methods={"DELETE"}, requirements={"id"="\d+"})
+     * @param Request $request
+     * @return Response
+     */
+    public function deleteOne(Request $request):Response
     {
-        return $this->serializer->serialize($data, 'json', SerializationContext::create()->setGroups($context));
+        $idRessource = $request->get('id') ? $request->get('id') : null;
+
+        if (empty($idRessource)) {
+            new Response(null, 404);
+        }
+
+        $resp = $this->delete(Beer::class, $idRessource);
+
+        return $resp;
     }
 }

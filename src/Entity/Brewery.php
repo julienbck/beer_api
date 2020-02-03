@@ -5,8 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as JMS;
-
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\BreweryRepository")
@@ -17,62 +16,62 @@ class Brewery
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @JMS\Expose
-     * @JMS\Groups({"beer-collection", "brewery-collection"})
+     *
+     * @Groups({"beer-collection", "brewery-collection", "beer-details"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @JMS\Expose
-     * @JMS\Groups({"beer-collection", "brewery-collection"})
+     *
+     * @Groups({"beer-collection", "brewery-collection", "beer-details"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @JMS\Expose
-     * @JMS\Groups({"brewery-collection"})
+     *
+     * @Groups({"brewery-collection", "beer-details"})
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @JMS\Expose
-     * @JMS\Groups({"brewery-collection"})
+     *
+     * @Groups({"brewery-collection", "beer-details"})
      */
     private $city;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @JMS\Expose
-     * @JMS\Groups({"brewery-collection"})
+     *
+     * @Groups({"brewery-collection", "beer-details"})
      */
     private $postalCode;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @JMS\Expose
-     * @JMS\Groups({"brewery-collection"})
+     *
+     * @Groups({"brewery-collection", "beer-details"})
      */
     private $country;
 
     /**
      * @ORM\Column(type="datetime")
-     * @JMS\Expose
-     * @JMS\Groups({"brewery-collection"})
+     *
+     * @Groups({"brewery-collection", "beer-details"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
-     * @JMS\Expose
-     * @JMS\Groups({"brewery-collection"})
+     *
+     * @Groups({"brewery-collection", "beer-details"})
      */
     private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Beer", mappedBy="brewery")
+     * @ORM\OneToMany(targetEntity="App\Entity\Beer", mappedBy="brewery", cascade={"remove"})
      */
     private $beers;
 

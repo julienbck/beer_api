@@ -4,30 +4,34 @@
 namespace App\Controller\Rest;
 
 
-use JMS\Serializer\SerializationContext;
-use JMS\Serializer\SerializerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class AbstractRestController extends AbstractController
 {
 
     protected $serializer;
 
-    public function __construct(SerializerInterface $serializer)
+    protected $validator;
+
+    public function __construct(\Symfony\Component\Serializer\SerializerInterface $serializer, ValidatorInterface $validator)
     {
         $this->serializer = $serializer;
+        $this->validator = $validator;
     }
 
     /**
      * @param string $className
      * @param $requestQuery
-     * @return string
+     * @param array $context
+     * @return array
      */
-    public function getCollectionEntity(string $className, $requestQuery)
+    public function getCollectionEntity(string $className, $requestQuery, array $context)
     {
         $page = 1;
         $limit = 10;
@@ -45,7 +49,12 @@ class AbstractRestController extends AbstractController
         $pagerfanta->setMaxPerPage($limit);
         $pagerfanta->setCurrentPage($page);
 
-        return iterator_to_array($pagerfanta->getCurrentPageResults());
+        return [
+            'data' => $this->serialize(iterator_to_array($pagerfanta->getCurrentPageResults()), $context),
+            'totalPage' => $pagerfanta->getNbPages(),
+            'totalHits' => $pagerfanta->getNbResults(),
+            'nextPage' => $pagerfanta->getNextPage()
+            ];
     }
 
     public function getOneEntity($className, $id)
@@ -53,13 +62,63 @@ class AbstractRestController extends AbstractController
        return $this->getDoctrine()->getRepository($className)->getOneById($id);
     }
 
-    public function post(Request $request): JsonResponse
+    /**
+     * @param $className
+     * @param $idRessource
+     * @return Response
+     */
+    public function delete($className, $idRessource)
     {
-        // TODO: Implement post() method.
+        $result = $this->getDoctrine()->getRepository($className)->find($idRessource);
+
+        if (empty($result)) {
+            return new Response('Not found', 404);
+        }
+
+        if ($result) {
+            $this->getDoctrine()->getManager()->remove($result);
+            $this->getDoctrine()->getManager()->flush();
+
+            return new Response(null, 204);
+        }
     }
 
-    public function patch(Request $request): JsonResponse
+    /**
+     * @param $requestContent
+     * @param $classNameDTO
+     */
+    public function postEntity($requestContent, $classNameDTO, $assemblerDTO): Response
     {
-        // TODO: Implement patch() method.
+        try {
+            $entityDTO = $this->deserialize($requestContent, $classNameDTO);
+            $errors = $this->validator->validate($entityDTO);
+            $errorsMessage = [];
+            if (0 !== count($errors)) {
+                foreach ($errors as $error) {
+                    $errorsMessage[] = $error->getMessage().' Property:  '.$error->getPropertyPath();
+                }
+                return new JsonResponse($errorsMessage, 400);
+            }
+
+            $entityHydrated  = $assemblerDTO->hydrateentity($entityDTO);
+
+            $this->getDoctrine()->getManager()->persist($entityHydrated);
+            $this->getDoctrine()->getManager()->flush();
+            $this->getDoctrine()->getManager()->clear();
+
+            return new Response(null, 201);
+        } catch(\Exception $e) {
+            return new Response($e->getMessage(), 400);
+        }
+    }
+
+    public function serialize($data, $context)
+    {
+        return $this->serializer->serialize($data, 'json', []);
+    }
+
+    public function deserialize($data, $className)
+    {
+        return $this->serializer->deserialize($data, $className,'json');
     }
 }

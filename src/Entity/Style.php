@@ -5,7 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as JMS;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\StyleRepository")
@@ -16,29 +16,29 @@ class Style
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @JMS\Expose
-     * @JMS\Groups({"beer-collection", "style-collection"})
+     *
+     * @Groups({"beer-collection", "style-collection", "beer-details"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @JMS\Expose
-     * @JMS\Groups({"beer-collection", "style-collection"})
+     *
+     * @Groups({"beer-collection", "style-collection", "beer-details"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="datetime")
-     * @JMS\Expose
-     * @JMS\Groups({"style-collection"})
+     *
+     * @Groups({"style-collection", "beer-details"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
-     * @JMS\Expose
-     * @JMS\Groups({"style-collection"})
+     *
+     * @Groups({"style-collection", "beer-details"})
      */
     private $updatedAt;
 
