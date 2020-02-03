@@ -4,20 +4,35 @@
 namespace App\Controller\Rest;
 
 
+use App\DTO\Assembler\BreweryAssembler;
+use App\DTO\BreweryDTO;
 use App\Entity\Brewery;
 use App\Repository\BreweryRepository;
-use JMS\Serializer\SerializationContext;
-use JMS\Serializer\SerializerInterface;
+
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class BreweryController extends AbstractRestController
 {
-    public function __construct(SerializerInterface $serializer)
+    /**
+     * @var BreweryAssembler
+     */
+    private $breweryAssembler;
+
+    /**
+     * BreweryController constructor.
+     * @param SerializerInterface $serializer
+     * @param ValidatorInterface $validator
+     * @param BreweryAssembler $breweryAssembler
+     */
+    public function __construct(SerializerInterface $serializer, ValidatorInterface $validator, BreweryAssembler $breweryAssembler)
     {
-        parent::__construct($serializer);
+        parent::__construct($serializer, $validator);
+        $this->breweryAssembler = $breweryAssembler;
     }
 
     /**
@@ -56,13 +71,15 @@ class BreweryController extends AbstractRestController
     }
 
     /**
-     * @Route("/breweries", name="post_brewery", methods={"POST"})
+     * @Route("/breweries", name="post_breweries", methods={"POST"})
      * @param Request $request
      * @return JsonResponse
      */
-    public function post(Request $request) :JsonResponse
+    public function post(Request $request) :Response
     {
+        $response = $this->postEntity($request->getContent(), BreweryDTO::class, $this->breweryAssembler);
 
+        return $response;
     }
 
     /**

@@ -4,17 +4,32 @@
 namespace App\Controller\Rest;
 
 
+use App\DTO\Assembler\CheckinAssembler;
+use App\DTO\CheckinDTO;
 use App\Entity\Checkin;
-use JMS\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class CheckinController extends AbstractRestController
 {
-    public function __construct(SerializerInterface $serializer)
+    /**
+     * @var CheckinAssembler
+     */
+    private $checkinAssembler;
+
+    /**
+     * CheckinController constructor.
+     * @param SerializerInterface $serializer
+     * @param ValidatorInterface $validator
+     * @param CheckinAssembler $checkinAssembler
+     */
+    public function __construct(SerializerInterface $serializer, ValidatorInterface $validator, CheckinAssembler $checkinAssembler)
     {
-        parent::__construct($serializer);
+        parent::__construct($serializer, $validator);
+        $this->checkinAssembler = $checkinAssembler;
     }
 
     /**
@@ -35,6 +50,18 @@ class CheckinController extends AbstractRestController
         $response->headers->set('totalHits', $results['totalHits']);
         $response->headers->set('totalPage', $results['totalPage']);
         $response->headers->set('nextPage', $results['nextPage']);
+
+        return $response;
+    }
+
+    /**
+     * @Route("/checkins", name="post_checkins", methods={"POST"})
+     * @param Request $request
+     * @return Response
+     */
+    public function post(Request $request) :Response
+    {
+        $response = $this->postEntity($request->getContent(), CheckinDTO::class, $this->checkinAssembler);
 
         return $response;
     }

@@ -4,19 +4,34 @@
 namespace App\Controller\Rest;
 
 
+use App\DTO\Assembler\StyleAssembler;
+use App\DTO\StyleDTO;
 use App\Entity\Style;
-use JMS\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class StyleController extends AbstractRestController
 {
 
-    public function __construct(SerializerInterface $serializer)
+    /**
+     * @var StyleAssembler
+     */
+    private $styleAssembler;
+
+    /**
+     * StyleController constructor.
+     * @param SerializerInterface $serializer
+     * @param ValidatorInterface $validator
+     * @param StyleAssembler $styleAssembler
+     */
+    public function __construct(SerializerInterface $serializer, ValidatorInterface $validator, StyleAssembler $styleAssembler)
     {
-        parent::__construct($serializer);
+        parent::__construct($serializer, $validator);
+        $this->styleAssembler = $styleAssembler;
     }
 
     /**
@@ -54,13 +69,15 @@ class StyleController extends AbstractRestController
     }
 
     /**
-     * @Route("/breweries", name="post_brewery", methods={"POST"})
+     * @Route("/styles", name="post_styles", methods={"POST"})
      * @param Request $request
      * @return JsonResponse
      */
-    public function post(Request $request) :JsonResponse
+    public function post(Request $request) :Response
     {
+        $response = $this->postEntity($request->getContent(), StyleDTO::class, $this->styleAssembler);
 
+        return $response;
     }
 
     /**

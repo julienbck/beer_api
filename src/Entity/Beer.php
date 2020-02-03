@@ -3,8 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as JMS;
-
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\BeerRepository")
@@ -16,57 +15,57 @@ class Beer
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @JMS\Expose
-     * @JMS\Groups({"beer-collection", "beer-details"})
+     *
+     * @Groups({"beer-collection", "beer-details"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @JMS\Expose
-     * @JMS\Groups({"beer-collection", "beer-details"})
+     *
+     * @Groups({"beer-collection", "beer-details"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="integer")
-     * @JMS\Expose
-     * @JMS\Groups({"beer-collection", "beer-details"})
+     *
+     * @Groups({"beer-collection", "beer-details"})
      */
     private $abv;
 
     /**
      * @ORM\Column(type="integer")
-     * @JMS\Expose
-     * @JMS\Groups({"beer-collection", "beer-details"})
+     *
+     * @Groups({"beer-collection", "beer-details"})
      */
     private $ibu;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Brewery", inversedBy="beers")
-     * @JMS\Expose
-     * @JMS\Groups({"beer-collection", "beer-details"})
+     *
+     * @Groups({"beer-collection", "beer-details"})
      */
     private $brewery;
 
     /**
      * @ORM\Column(type="datetime")
-     * @JMS\Expose
-     * @JMS\Groups({"beer-collection", "beer-details"})
+     *
+     * @Groups({"beer-collection", "beer-details"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
-     * @JMS\Expose
-     * @JMS\Groups({"beer-collection", "beer-details"})
+     *
+     * @Groups({"beer-collection", "beer-details"})
      */
     private $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Style")
-     * @JMS\Expose
-     * @JMS\Groups({"beer-collection", "beer-details"})
+     *
+     * @Groups({"beer-collection", "beer-details"})
      */
     private $style;
 
