@@ -1,0 +1,101 @@
+= Specifications
+
+
+Le modèle métier est composé de 4 entités.
+
+* Utilisateur
+* Biere
+* Brasserie
+* Checkin
+
+== Detail des entites
+
+=== Utilisateur
+
+|===
+|Champ |Type |Obligatoire 
+
+|Email |string |Oui 
+|Mot de passe |string |Oui 
+|Role |string[] |Oui 
+|Pseudonyme |string |Oui 
+|Avatar |string ou blob |Non 
+|Date de creation| Datetime|Oui
+|Date de mise a jour| Datetime|Oui
+|===
+
+=== Biere
+
+|===
+|Champ |Type |Obligatoire 
+
+|Nom |string |Oui 
+|abv |float |Oui 
+|ibu |int |Oui 
+|Brasserie |Brasserie |Non 
+|Date de creation| Datetime|Oui
+|Date de mise a jour| Datetime|Oui
+|===
+
+=== Brasserie
+
+|===
+|Champ |Type |Obligatoire 
+
+|Nom |string |Oui 
+|Rue |string |Non 
+|ville |string |Non 
+|code postal |string |Non 
+|Pays |string |Non 
+|Date de creation| Datetime|Oui
+|Date de mise a jour| Datetime|Oui
+|===
+
+=== Checkin
+
+|===
+|Champ |Type |Obligatoire 
+
+|Note |float 0 < 10 |Oui 
+|Biere |Biere |Oui 
+|Utilisateur |Utilisateur |Oui 
+|Date de creation| Datetime|Oui
+|Date de mise a jour| Datetime|Oui
+|===
+
+== Specifications fonctionnelles
+
+Dans un premier temps faire une routine d'import qui injecte le fichiers dans une base de donnees.
+
+Réaliser une API REST, juste la partie back end testable avec une client http.
+
+Il s'agit principalement de realiser les operations CRUD sur les resources definies plus haut.
+
+Lorsque qu'un utilisateur realise un checkin il choisi une biere et une note associee.
+
+De plus cette api reste doit permettre de pouvoir trouver un certain nombre de classement.
+
+* Remonter la/les  biere(s) la plus forte.
+* Trouver la/les biere(s) la/les plus amere (IBU)
+* Classement des pays, par nombre de brasserie
+* Classement des style de bieres par nombre de reference.
+* Classement des bieres par taux d'alcool 
+
+=== Non obligatoire
+Realiser l'auhtentification de l'utilisateur via Oauth, JWT ou autre.
+
+=== Architecture technique
+
+* Language: PHP7
+* Framework: Symfony4 minimum
+* Serveur d'applicatif: Nginx ou Apache au choix.
+* Base de donnees: Mysql, Mariadb, Postgres, ou solution NoSQL.
+
+=== Points annexes
+
+Il serait très intéressant :
+
+* De disposer d'une documentation auto générée sur un format OpenApi
+* Que les points d'api soit testable via un framework de test
+* D'avoir des temps de réponses assez bas mêmes si la base de données est très chargée.
+* De pouvoir faire en sorte que l'api scale en fonction du traffic.

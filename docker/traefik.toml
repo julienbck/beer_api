@@ -1,0 +1,13 @@
+################################################################
+# Docker Provider
+################################################################
+
+# Enable Docker Provider.
+[docker]
+	endpoint = "unix:///var/run/docker.sock"
+	watch = true
+	exposedByDefault = false
+	usebindportip = false
+
+[api]
+	dashboard = true

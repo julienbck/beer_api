@@ -1,0 +1,72 @@
+version: '3'
+
+volumes:
+    appdata:
+    esdata:
+
+networks:
+    beer_checkin_back:
+
+services:
+    traefik-proxy:
+        container_name: ${COMPOSE_PROJECT_NAME}_traefik
+        image: traefik:1.7
+        ports:
+            - "80:80"
+            - "443:443"
+            - "8080:8080"
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - ./docker/config/traefik.toml:/traefik.toml
+        networks:
+            - beer_checkin_back
+
+    php:
+        container_name: ${COMPOSE_PROJECT_NAME}_php
+        build: ./docker/php
+        volumes:
+            - ./:/var/www/bar-management
+            - .:/var/www/html:cached
+            - appdata:/var/www/html/var/cache
+            - appdata:/var/www/html/var/log
+            - ./vendor:/var/www/html/vendor:delegated
+        working_dir: /var/www/html
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:beer.localhost"
+            - "traefik.entryPoint=http"
+        networks:
+            - beer_checkin_back
+
+    mysql:
+        container_name: ${COMPOSE_PROJECT_NAME}_mysql
+        image: mysql:latest
+        command: --default-authentication-plugin=mysql_native_password
+        environment:
+            MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${DATABASE_NAME}
+            MYSQL_USER: ${DATABASE_USER}
+            MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+        security_opt: #fix mbind not permitted in container
+            - seccomp:unconfined
+        healthcheck:
+            test: "mysql --user=root --password=${DATABASE_ROOT_PASSWORD} --execute \"SHOW DATABASES;\""
+            interval: 3s
+            timeout: 1s
+            retries: 5
+        networks:
+            - beer_checkin_back
+
+    phpmyadmin:
+        container_name: ${COMPOSE_PROJECT_NAME}_pma
+        image: phpmyadmin/phpmyadmin
+        environment:
+            PMA_HOST: ${DATABASE_HOST}
+            PMA_USERNAME:  ${DATABASE_USER}
+            PMA_PASSWORD:  ${DATABASE_PASSWORD}
+        networks:
+            - beer_checkin_back
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:pma.beer.localhost"
+            - "traefik.entryPoint=http"
