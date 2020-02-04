@@ -19,7 +19,7 @@ class BreweryRepository extends ServiceEntityRepository
         parent::__construct($registry, Brewery::class);
     }
 
-    public function getCollection()
+    public function getCollection($requestQuery)
     {
         $qb = $this->createQueryBuilder('b');
 
