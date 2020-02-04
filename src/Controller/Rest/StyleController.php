@@ -81,13 +81,24 @@ class StyleController extends AbstractRestController
     }
 
     /**
-     * @Route("/breweries/{id}", name="patch_brewery", methods={"PATCH"})
+     * @Route("/styles/{id}", name="patch_styles", methods={"PATCH"})
      * @param Request $request
-     * @return JsonResponse
+     * @return Response
      */
-    public function patch(Request $request) :JsonResponse
+    public function patch(Request $request) :Response
     {
+        $styleId = $request->attributes->get('id');
 
+        $style = $this->getDoctrine()->getRepository(Style::class)->find($styleId);
+        if (empty($style)) {
+            throw $this->createNotFoundException(
+                'No style found for id '. $styleId
+            );
+        }
+
+        $response = $this->patchEntity($request, StyleDTO::class, $this->styleAssembler, $style);
+
+        return $response;
     }
 
     /**
