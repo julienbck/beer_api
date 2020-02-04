@@ -35,4 +35,27 @@ class BreweryAssembler
 
         return $brewery;
     }
+
+    public function hydrateEntityPatch(BreweryDTO $breweryDTO, Brewery $brewery): Brewery
+    {
+        if (!is_null($breweryDTO->getName())) {
+             $brewery->setName($breweryDTO->getName());
+        }
+
+        if (!is_null($breweryDTO->getAddress())) {
+            $brewery->setAddress($breweryDTO->getAddress());
+        }
+
+        if (!is_null($breweryDTO->getPostalCode())) {
+            $brewery->setPostalCode($breweryDTO->getPostalCode());
+        }
+
+        if (!is_null($breweryDTO->getCity())) {
+            $brewery->setCity($breweryDTO->getCity());
+        }
+
+        $brewery->setUpdatedAt(new \DateTime());
+
+        return $brewery;
+    }
 }
