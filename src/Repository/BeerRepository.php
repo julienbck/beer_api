@@ -47,4 +47,26 @@ class BeerRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getOneOrNullResult();
     }
+
+    public function getBeerByMaxAttribute($attributeName)
+    {
+        $qb = $this->createQueryBuilder('b');
+        $qb2 = $this->_em->createQueryBuilder();
+
+        $qb
+            ->addSelect('br, s')
+            ->join('b.brewery', 'br')
+            ->leftJoin('b.style', 's')
+            ->where(
+                $qb->expr()->in(
+                    sprintf('b.%s', $attributeName),
+                    $qb2
+                        ->select(sprintf('MAX(b2.%s)', $attributeName))
+                            ->from(Beer::class, 'b2')
+                            ->getDQL()
+                        )
+                );
+
+        return $qb->getQuery()->getResult();
+    }
 }

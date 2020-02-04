@@ -7,8 +7,6 @@ namespace App\Controller\Rest;
 use App\DTO\Assembler\BreweryAssembler;
 use App\DTO\BreweryDTO;
 use App\Entity\Brewery;
-use App\Repository\BreweryRepository;
-
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -108,5 +106,18 @@ class BreweryController extends AbstractRestController
         $resp = $this->delete(Brewery::class, $idRessource);
 
         return $resp;
+    }
+
+    /**
+     * @Route("/breweries/country", name="get_country_brewery", methods={"get"})
+     * @param Request $request
+     * @return Response
+     */
+    public function getBreweryCountry(Request $request) : Response
+    {
+        $result = $this->getDoctrine()->getRepository(Brewery::class)->getNumberBreweryByCountry();
+        $json = $this->serialize($result);
+
+        return new Response($json, 200,  ['Content-type' => 'application/json']);
     }
 }

@@ -3,19 +3,16 @@
 
 namespace App\Controller\Rest;
 
-
 use App\DTO\Assembler\BeerAssembler;
 use App\DTO\BeerDTO;
 use App\Entity\Beer;
-use App\Entity\Brewery;
-use App\Form\BeerType;
-use App\Repository\BeerRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use App\Common\QueryAnnotation;
 
 class BeerController extends AbstractRestController
 {
@@ -37,10 +34,13 @@ class BeerController extends AbstractRestController
         $this->beerAssembler = $beerAssembler;
     }
 
+
     /**
      * @Route("/beers", name="get_beers", methods={"GET"})
      * @param Request $request
      * @return Response
+     * @QueryAnnotation(name="page", type="integer", requirements="(\d+)")
+     * @QueryAnnotation(name="limit", type="integer", requirements="(\d{2})")
      */
     public function getCollection(Request $request): Response
     {
@@ -54,6 +54,7 @@ class BeerController extends AbstractRestController
         $response->headers->set('totalHits', $results['totalHits']);
         $response->headers->set('totalPage', $results['totalPage']);
         $response->headers->set('nextPage', $results['nextPage']);
+        $response->headers->set('Content-type', 'application/json');
 
         return $response;
     }
@@ -74,7 +75,7 @@ class BeerController extends AbstractRestController
         }
         $json = $this->serialize($beer, ['beer-details']);
 
-        return new Response($json, 200);
+        return new Response($json, 200, ['Content-type' => 'application/json']);
     }
 
     /**
@@ -115,5 +116,19 @@ class BeerController extends AbstractRestController
         $resp = $this->delete(Beer::class, $idRessource);
 
         return $resp;
+    }
+
+    /**
+     * @Route("/beers/filter/max", name="get_beers_max_attribute", methods={"GET"})
+     * @param Request $request
+     * @return Response
+     * @QueryAnnotation(name="attribute", type="string", requirements="ibu|abv", required=true)
+     */
+    public function getBeersByAbv(Request $request)
+    {
+        $beers = $this->getDoctrine()->getRepository(Beer::class)->getBeerByMaxAttribute($request->get('attribute'));
+        $json = $this->serialize($beers, ['beer-details']);
+
+        return new Response($json, 200, ['Content-type' => 'application/json']);
     }
 }
