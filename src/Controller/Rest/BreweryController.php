@@ -109,4 +109,17 @@ class BreweryController extends AbstractRestController
 
         return $resp;
     }
+
+    /**
+     * @Route("/breweries/country/sort", name="get_country_brewery", methods={"get"})
+     * @param Request $request
+     * @return Response
+     */
+    public function getBreweryCountry(Request $request) : Response
+    {
+        $result = $this->getDoctrine()->getRepository(Brewery::class)->getNumberBreweryByCountry();
+        $json = $this->serialize($result);
+
+        return new Response($json, 200,  ['Content-type' => 'application/json']);
+    }
 }

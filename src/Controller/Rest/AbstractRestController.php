@@ -112,12 +112,12 @@ class AbstractRestController extends AbstractController
         }
     }
 
-    public function serialize($data, $context)
+    public function serialize($data, $context = null)
     {
-        return $this->serializer->serialize($data, 'json', []);
+        return $this->serializer->serialize($data, 'json', ['groups' => $context]);
     }
 
-    public function deserialize($data, $className)
+    public function deserialize($data, $className = null)
     {
         return $this->serializer->deserialize($data, $className,'json');
     }

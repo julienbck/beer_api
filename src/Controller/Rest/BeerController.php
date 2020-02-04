@@ -54,6 +54,7 @@ class BeerController extends AbstractRestController
         $response->headers->set('totalHits', $results['totalHits']);
         $response->headers->set('totalPage', $results['totalPage']);
         $response->headers->set('nextPage', $results['nextPage']);
+        $response->headers->set('Content-type', 'application/json');
 
         return $response;
     }
@@ -74,7 +75,7 @@ class BeerController extends AbstractRestController
         }
         $json = $this->serialize($beer, ['beer-details']);
 
-        return new Response($json, 200);
+        return new Response($json, 200, ['Content-type' => 'application/json']);
     }
 
     /**
@@ -115,5 +116,18 @@ class BeerController extends AbstractRestController
         $resp = $this->delete(Beer::class, $idRessource);
 
         return $resp;
+    }
+
+    /**
+     * @Route("/beers/filter/max", name="get_beers_max_attribute", methods={"GET"})
+     * @param Request $request
+     * @return Response
+     */
+    public function getBeersByAbv(Request $request)
+    {
+        $beers = $this->getDoctrine()->getRepository(Beer::class)->getBeerByMaxAttribute($request->get('attribute'));
+        $json = $this->serialize($beers, ['beer-details']);
+
+        return new Response($json, 200, ['Content-type' => 'application/json']);
     }
 }

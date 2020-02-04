@@ -107,4 +107,14 @@ class StyleController extends AbstractRestController
 
         return $resp;
     }
+
+    /**
+     * @Route("/styles/beers/quantity", name="get_styles_beers_quantity", methods={"GET"})
+     * @param Request $request
+     * @return Response
+     */
+    public function getStyleByBeersQuantity()
+    {
+
+    }
 }
