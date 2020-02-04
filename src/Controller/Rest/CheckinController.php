@@ -65,4 +65,25 @@ class CheckinController extends AbstractRestController
 
         return $response;
     }
+
+    /**
+     * @Route("/checkins/{id}", name="patch_checkin", methods={"PATCH"}, requirements={"id"="\d+"})
+     * @param Request $request
+     * @return Response
+     */
+    public function patch(Request $request) :Response
+    {
+        $checkinId = $request->attributes->get('id');
+
+        $checkin = $this->getDoctrine()->getRepository(Checkin::class)->find($checkinId);
+        if (empty($checkin)) {
+            throw $this->createNotFoundException(
+                'No checkin found for id '. $checkinId
+            );
+        }
+
+        $response = $this->patchEntity($request, CheckinDTO::class, $this->checkinAssembler, $checkin);
+
+        return $response;
+    }
 }
