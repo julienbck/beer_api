@@ -9,7 +9,9 @@ use App\Entity\Beer;
 use App\Entity\Checkin;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
+use Symfony\Component\VarExporter\Exception\ClassNotFoundException;
 
 class CheckinAssembler
 {
@@ -34,7 +36,7 @@ class CheckinAssembler
             $beer = $this->em->getRepository(Beer::class)->find($checkinDTO->getBeerId());
 
             if (empty($beer)) {
-                throw new NotFoundResourceException();
+                throw new NotFoundHttpException('Don\'t find beer with id '.$checkinDTO->getBeerId());
             }
 
             $checkin = new Checkin();
