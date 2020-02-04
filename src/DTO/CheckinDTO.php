@@ -44,7 +44,7 @@ class CheckinDTO
     /**
      * @return int
      */
-    public function getBeerId(): int
+    public function getBeerId(): ?int
     {
         return $this->beerId;
     }

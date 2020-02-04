@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use App\Common\QueryAnnotation;
 
 class BreweryController extends AbstractRestController
 {
@@ -37,6 +38,8 @@ class BreweryController extends AbstractRestController
      * @Route("/breweries", name="get_breweries", methods={"GET"})
      * @param Request $request
      * @return Response
+     * @QueryAnnotation(name="page", type="integer", requirements="(\d+)")
+     * @QueryAnnotation(name="limit", type="integer", requirements="(\d{2})")
      */
     public function getCollection(Request $request)
     {
@@ -80,15 +83,28 @@ class BreweryController extends AbstractRestController
         return $response;
     }
 
-    /**
-     * @Route("/breweries/{id}", name="patch_brewery", methods={"PATCH"})
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function patch(Request $request) :JsonResponse
-    {
 
+    /**
+     * @Route("/breweries/{id}", name="patch_brewery", methods={"PATCH"}, requirements={"id"="\d+"})
+     * @param Request $request
+     * @return Response
+     */
+    public function patch(Request $request) :Response
+    {
+        $breweryId = $request->attributes->get('id');
+
+        $brewery = $this->getDoctrine()->getRepository(Brewery::class)->find($breweryId);
+        if (empty($brewery)) {
+                throw $this->createNotFoundException(
+                    'No product found for id '. $breweryId
+                );
+        }
+
+        $response = $this->patchEntity($request, BreweryDTO::class, $this->breweryAssembler, $brewery);
+
+        return $response;
     }
+
 
     /**
      * @Route("/breweries/{id}", name="delete_brewery", methods={"DELETE"}, requirements={"id"="\d+"})
@@ -109,13 +125,14 @@ class BreweryController extends AbstractRestController
     }
 
     /**
-     * @Route("/breweries/country", name="get_country_brewery", methods={"get"})
+     * @Route("/breweries/country/counter", name="get_country_brewery", methods={"get"})
      * @param Request $request
      * @return Response
+     * @QueryAnnotation(name="sort", type="string", requirements="ASC|DESC")
      */
     public function getBreweryCountry(Request $request) : Response
     {
-        $result = $this->getDoctrine()->getRepository(Brewery::class)->getNumberBreweryByCountry();
+        $result = $this->getDoctrine()->getRepository(Brewery::class)->getNumberBreweryByCountry($request->query->get('sort'));
         $json = $this->serialize($result);
 
         return new Response($json, 200,  ['Content-type' => 'application/json']);
