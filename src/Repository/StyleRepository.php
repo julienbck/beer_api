@@ -19,7 +19,7 @@ class StyleRepository extends ServiceEntityRepository
         parent::__construct($registry, Style::class);
     }
 
-    public function getCollection()
+    public function getCollection($requestQuery)
     {
         $qb = $this->createQueryBuilder('s');
 

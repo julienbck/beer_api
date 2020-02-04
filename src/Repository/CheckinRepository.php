@@ -19,7 +19,7 @@ class CheckinRepository extends ServiceEntityRepository
         parent::__construct($registry, Checkin::class);
     }
 
-    public function getCollection()
+    public function getCollection($requestQuery)
     {
         $qb = $this->createQueryBuilder('ci');
 

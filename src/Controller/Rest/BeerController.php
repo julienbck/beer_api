@@ -41,6 +41,8 @@ class BeerController extends AbstractRestController
      * @return Response
      * @QueryAnnotation(name="page", type="integer", requirements="(\d+)")
      * @QueryAnnotation(name="limit", type="integer", requirements="(\d{2})")
+     * @QueryAnnotation(name="sort_desc_by_attribute", type="string", requirements="abv|ibu")
+     * @QueryAnnotation(name="sort_asc_by_attribute", type="string", requirements="abv|ibu")
      */
     public function getCollection(Request $request): Response
     {
