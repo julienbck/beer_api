@@ -7,6 +7,7 @@ namespace App\Listener;
 use App\Common\QueryParamValidator;
 use App\Controller\Rest\AbstractRestController;
 use Doctrine\Common\Annotations\Reader;
+use Symfony\Component\HttpKernel\Controller\ErrorController;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 
 class QueryAnnotationListener
@@ -32,9 +33,12 @@ class QueryAnnotationListener
     public function onKernelController(ControllerEvent $event)
     {
         $controller = $event->getController();
-        $reflecClass = new \ReflectionClass($controller[0]);
-        if($reflecClass->isSubclassOf(AbstractRestController::class)) {
-            $this->queryParamValidator->validate($event->getRequest(), $controller[0], $controller[1]);
+        if(!$controller instanceof ErrorController) {
+            $reflecClass = new \ReflectionClass($controller[0]);
+
+            if ($reflecClass->isSubclassOf(AbstractRestController::class)) {
+                $this->queryParamValidator->validate($event->getRequest(), $controller[0], $controller[1]);
+            }
         }
     }
 }
