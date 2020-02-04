@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use App\Common\QueryAnnotation;
 
 class CheckinController extends AbstractRestController
 {
@@ -36,6 +37,8 @@ class CheckinController extends AbstractRestController
      * @Route("/checkins", name="get_checkins", methods={"GET"})
      * @param Request $request
      * @return Response
+     * @QueryAnnotation(name="page", type="integer", requirements="(\d+)")
+     * @QueryAnnotation(name="limit", type="integer", requirements="(\d{2})")
      */
     public function getCollection(Request $request)
     {

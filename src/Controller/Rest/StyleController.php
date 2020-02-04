@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use App\Common\QueryAnnotation;
 
 class StyleController extends AbstractRestController
 {
@@ -27,6 +28,8 @@ class StyleController extends AbstractRestController
      * @param SerializerInterface $serializer
      * @param ValidatorInterface $validator
      * @param StyleAssembler $styleAssembler
+     * @QueryAnnotation(name="page", type="integer", requirements="(\d+)")
+     * @QueryAnnotation(name="limit", type="integer", requirements="(\d{2})")
      */
     public function __construct(SerializerInterface $serializer, ValidatorInterface $validator, StyleAssembler $styleAssembler)
     {
@@ -120,12 +123,16 @@ class StyleController extends AbstractRestController
     }
 
     /**
-     * @Route("/styles/beers/quantity", name="get_styles_beers_quantity", methods={"GET"})
+     * @Route("/styles/beers/counter", name="get_styles_beers_quantity", methods={"GET"})
      * @param Request $request
      * @return Response
+     * @QueryAnnotation(name="sort", type="string", requirements="ASC|DESC")
      */
-    public function getStyleByBeersQuantity()
+    public function getStyleByBeersQuantity(Request $request)
     {
+        $result = $this->getDoctrine()->getRepository(Style::class)->getNumberBeersByStyle($request->query->get('sort'));
+        $json = $this->serialize($result);
 
+        return new Response($json, 200,  ['Content-type' => 'application/json']);
     }
 }
