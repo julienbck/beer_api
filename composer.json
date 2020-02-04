@@ -18,7 +18,8 @@
         "white-october/pagerfanta-bundle": "^1.3"
     },
     "require-dev": {
-        "symfony/maker-bundle": "^1.14"
+        "symfony/maker-bundle": "^1.14",
+        "symfony/profiler-pack": "^1.0"
     },
     "config": {
         "preferred-install": {
