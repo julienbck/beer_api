@@ -97,11 +97,14 @@ class AbstractRestController extends AbstractController
     /**
      * @param $requestContent
      * @param $classNameDTO
+     * @param $assemblerDTO
+     * @return Response
      */
     public function postEntity($requestContent, $classNameDTO, $assemblerDTO): Response
     {
         try {
             $entityDTO = $this->deserialize($requestContent, $classNameDTO);
+
             $errors = $this->validator->validate($entityDTO);
             $errorsMessage = [];
             if (0 !== count($errors)) {

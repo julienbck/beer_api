@@ -40,14 +40,15 @@ class BreweryRepository extends ServiceEntityRepository
         return $qb->getQuery()->getOneOrNullResult();
     }
 
-    public function getNumberBreweryByCountry()
+    public function getNumberBreweryByCountry($sortVal)
     {
         $qb = $this->createQueryBuilder('b');
 
         $qb
-            ->select('b.country, COUNT(b.id) as totalBrewery')
+            ->select('b.country, COUNT(b.id) as totalBreweries')
+            ->orderBy('totalBreweries', $sortVal ? $sortVal : "DESC")
             ->groupBy('b.country');
-
+        
         return $qb->getQuery()->getScalarResult();
     }
 }

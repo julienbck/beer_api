@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use App\Common\QueryAnnotation;
 
 class BreweryController extends AbstractRestController
 {
@@ -37,6 +38,8 @@ class BreweryController extends AbstractRestController
      * @Route("/breweries", name="get_breweries", methods={"GET"})
      * @param Request $request
      * @return Response
+     * @QueryAnnotation(name="page", type="integer", requirements="(\d+)")
+     * @QueryAnnotation(name="limit", type="integer", requirements="(\d{2})")
      */
     public function getCollection(Request $request)
     {
@@ -109,13 +112,14 @@ class BreweryController extends AbstractRestController
     }
 
     /**
-     * @Route("/breweries/country", name="get_country_brewery", methods={"get"})
+     * @Route("/breweries/country/counter", name="get_country_brewery", methods={"get"})
      * @param Request $request
      * @return Response
+     * @QueryAnnotation(name="sort", type="string", requirements="ASC|DESC")
      */
     public function getBreweryCountry(Request $request) : Response
     {
-        $result = $this->getDoctrine()->getRepository(Brewery::class)->getNumberBreweryByCountry();
+        $result = $this->getDoctrine()->getRepository(Brewery::class)->getNumberBreweryByCountry($request->query->get('sort'));
         $json = $this->serialize($result);
 
         return new Response($json, 200,  ['Content-type' => 'application/json']);
