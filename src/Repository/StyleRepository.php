@@ -40,7 +40,7 @@ class StyleRepository extends ServiceEntityRepository
         return $qb->getQuery()->getOneOrNullResult();
     }
 
-    public function getNumberBeersByStyle($sortVal)
+    public function getNumberBeersByStyle($sortVal, $styleId)
     {
         $qb = $this->createQueryBuilder('s');
 
@@ -49,6 +49,12 @@ class StyleRepository extends ServiceEntityRepository
             ->join('s.beers', 'b')
             ->orderBy('totalBreweries', $sortVal ? $sortVal : "DESC")
             ->groupBy('s.id');
+
+        if (!empty($styleId)) {
+            $qb
+                ->where('s.id = :styleId')
+                ->setParameter('styleId', $styleId);
+        }
 
         return $qb->getQuery()->getScalarResult();
     }
