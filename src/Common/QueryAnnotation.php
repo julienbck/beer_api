@@ -32,4 +32,10 @@ class QueryAnnotation
      * @var string
      */
     public $requirements;
+
+    /**
+     * @Annotation\Required()
+     * @var boolean
+     */
+    public $required = false;
 }

@@ -3,17 +3,9 @@
 
 namespace App\Controller\Rest;
 
-
-use App\Common\QueryAnnotationReader;
-use App\Common\QueryParamValidator;
 use App\DTO\Assembler\BeerAssembler;
 use App\DTO\BeerDTO;
 use App\Entity\Beer;
-use App\Entity\Brewery;
-use App\Form\BeerType;
-use App\Repository\BeerRepository;
-use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\Reader;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,10 +20,6 @@ class BeerController extends AbstractRestController
      * @var BeerAssembler
      */
     private $beerAssembler;
-    /**
-     * @var QueryParamValidator
-     */
-    private $queryParamValidator;
 
     /**
      * BeerController constructor.
@@ -39,13 +27,13 @@ class BeerController extends AbstractRestController
      * @param ValidatorInterface $validator
      * @param BeerAssembler $beerAssembler
      */
-    public function __construct(SerializerInterface $serializer, ValidatorInterface $validator, BeerAssembler $beerAssembler, QueryParamValidator $queryParamValidator)
+    public function __construct(SerializerInterface $serializer, ValidatorInterface $validator, BeerAssembler $beerAssembler)
     {
         parent::__construct($serializer, $validator);
 
         $this->beerAssembler = $beerAssembler;
-        $this->queryParamValidator = $queryParamValidator;
     }
+
 
     /**
      * @Route("/beers", name="get_beers", methods={"GET"})
@@ -56,8 +44,6 @@ class BeerController extends AbstractRestController
      */
     public function getCollection(Request $request): Response
     {
-        $this->queryParamValidator->validate($request, $this, __METHOD__);
-
         $results = $this->getCollectionEntity(Beer::class, $request->query, ['beer-collection']);
 
         if (empty($results['data'])) {
@@ -80,8 +66,6 @@ class BeerController extends AbstractRestController
      */
     public function getOne(Request $request): Response
     {
-        $this->queryParamValidator->validate($request, $this, __METHOD__);
-
         $idRessource = $request->get('id') ? $request->get('id') : null;
 
         $beer = $this->getOneEntity(Beer::class, $idRessource);
@@ -138,11 +122,10 @@ class BeerController extends AbstractRestController
      * @Route("/beers/filter/max", name="get_beers_max_attribute", methods={"GET"})
      * @param Request $request
      * @return Response
-     * @QueryAnnotation(name="attribute", type="string", requirements="ibu|abv")
+     * @QueryAnnotation(name="attribute", type="string", requirements="ibu|abv", required=true)
      */
     public function getBeersByAbv(Request $request)
     {
-        $this->queryParamValidator->validate($request, $this, __METHOD__);
         $beers = $this->getDoctrine()->getRepository(Beer::class)->getBeerByMaxAttribute($request->get('attribute'));
         $json = $this->serialize($beers, ['beer-details']);
 
