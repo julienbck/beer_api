@@ -93,11 +93,22 @@ class BeerController extends AbstractRestController
     /**
      * @Route("/beers/{id}", name="patch_beer", methods={"PATCH"}, requirements={"id"="\d+"})
      * @param Request $request
-     * @return JsonResponse
+     * @return Response
      */
-    public function patch(Request $request) :JsonResponse
+    public function patch(Request $request) :Response
     {
+        $beerId = $request->attributes->get('id');
 
+        $beer = $this->getDoctrine()->getRepository(Beer::class)->find($beerId);
+        if (empty($beer)) {
+            throw $this->createNotFoundException(
+                'No beer found for id '. $beerId
+            );
+        }
+
+        $response = $this->patchEntity($request, BeerDTO::class, $this->beerAssembler, $beer);
+
+        return $response;
     }
 
     /**
