@@ -9,6 +9,8 @@ use App\DTO\BreweryDTO;
 use App\Entity\Brewery;
 use App\Repository\BreweryRepository;
 
+use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\Reader;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -111,7 +113,7 @@ class BreweryController extends AbstractRestController
     }
 
     /**
-     * @Route("/breweries/country/sort", name="get_country_brewery", methods={"get"})
+     * @Route("/breweries/country", name="get_country_brewery", methods={"get"})
      * @param Request $request
      * @return Response
      */

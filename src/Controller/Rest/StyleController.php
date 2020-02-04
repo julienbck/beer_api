@@ -7,6 +7,8 @@ namespace App\Controller\Rest;
 use App\DTO\Assembler\StyleAssembler;
 use App\DTO\StyleDTO;
 use App\Entity\Style;
+use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\Reader;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
