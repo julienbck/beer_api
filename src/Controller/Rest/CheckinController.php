@@ -7,8 +7,6 @@ namespace App\Controller\Rest;
 use App\DTO\Assembler\CheckinAssembler;
 use App\DTO\CheckinDTO;
 use App\Entity\Checkin;
-use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\Reader;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;

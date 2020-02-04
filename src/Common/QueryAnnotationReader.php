@@ -22,7 +22,7 @@ class QueryAnnotationReader
     public function readAnnotationMethod($class, $method)
     {
         $reflecObjt = new \ReflectionObject($class);
-        $reflecMethod = $reflecObjt->getMethod(str_replace("::", "", strstr($method, '::')));
+        $reflecMethod = $reflecObjt->getMethod($method);
 
         $methodsAnnotations = $this->reader->getMethodAnnotations($reflecMethod);
 

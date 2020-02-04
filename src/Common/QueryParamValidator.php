@@ -27,10 +27,12 @@ class QueryParamValidator
         $queryParams = $request->query->all();
         $queryAnnotations = $this->queryAnnotationReader->readAnnotationMethod($classController, $method);
 
-        foreach ($queryParams as $name => $param) {
-            foreach ($queryAnnotations as $annotation) {
+        foreach ($queryAnnotations as $annotation) {
+            if ($annotation->required && !array_key_exists($annotation->name, $queryParams)) {
+                throw new BadRequestHttpException('Parameter '.$annotation->name.' was required');
+            }
+            foreach ($queryParams as $name => $param) {
                 if ($name == $annotation->name) {
-
                     // CHECK TYPE INTEGER
                     if ($annotation->type == "integer") {
                         if(!is_numeric($param)) {

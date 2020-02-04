@@ -9,16 +9,28 @@ use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class AbstractRestController extends AbstractController
 {
 
+    /**
+     * @var SerializerInterface
+     */
     protected $serializer;
 
+    /**
+     * @var ValidatorInterface
+     */
     protected $validator;
 
-    public function __construct(\Symfony\Component\Serializer\SerializerInterface $serializer, ValidatorInterface $validator)
+    /**
+     * AbstractRestController constructor.
+     * @param SerializerInterface $serializer
+     * @param ValidatorInterface $validator
+     */
+    public function __construct(SerializerInterface $serializer, ValidatorInterface $validator)
     {
         $this->serializer = $serializer;
         $this->validator = $validator;
@@ -30,7 +42,7 @@ class AbstractRestController extends AbstractController
      * @param array $context
      * @return array
      */
-    public function getCollectionEntity(string $className, $requestQuery, array $context)
+    public function getCollectionEntity(string $className, $requestQuery, array $context): array
     {
         $page = 1;
         $limit = 10;
