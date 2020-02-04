@@ -127,10 +127,11 @@ class StyleController extends AbstractRestController
      * @param Request $request
      * @return Response
      * @QueryAnnotation(name="sort", type="string", requirements="ASC|DESC")
+     * @QueryAnnotation(name="style_id", type="integer", requirements="(\d+)")
      */
     public function getStyleByBeersQuantity(Request $request)
     {
-        $result = $this->getDoctrine()->getRepository(Style::class)->getNumberBeersByStyle($request->query->get('sort'));
+        $result = $this->getDoctrine()->getRepository(Style::class)->getNumberBeersByStyle($request->query->get('sort'), $request->query->get('style_id'));
         $json = $this->serialize($result);
 
         return new Response($json, 200,  ['Content-type' => 'application/json']);
