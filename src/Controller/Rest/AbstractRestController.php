@@ -8,6 +8,7 @@ use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -114,7 +115,7 @@ class AbstractRestController extends AbstractController
                 return new JsonResponse($errorsMessage, 400);
             }
 
-            $entityHydrated  = $assemblerDTO->hydrateentity($entityDTO);
+            $entityHydrated  = $assemblerDTO->hydrateEntity($entityDTO);
 
             $this->getDoctrine()->getManager()->persist($entityHydrated);
             $this->getDoctrine()->getManager()->flush();
@@ -124,6 +125,17 @@ class AbstractRestController extends AbstractController
         } catch(\Exception $e) {
             return new Response($e->getMessage(), 400);
         }
+    }
+
+    public function patchEntity(Request $request, $classNameDTO, $assemblerDTO, $entity): Response
+    {
+        $entityDTO = $this->deserialize($request->getcontent(), $classNameDTO);
+        $entityHydrated  = $assemblerDTO->hydrateEntityPatch($entityDTO, $entity);
+
+        $this->getDoctrine()->getManager()->persist($entityHydrated);
+        $this->getDoctrine()->getManager()->flush();
+
+        return new Response('success', 204);
     }
 
     public function serialize($data, $context = null)

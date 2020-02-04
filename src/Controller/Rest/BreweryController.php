@@ -83,15 +83,28 @@ class BreweryController extends AbstractRestController
         return $response;
     }
 
-    /**
-     * @Route("/breweries/{id}", name="patch_brewery", methods={"PATCH"})
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function patch(Request $request) :JsonResponse
-    {
 
+    /**
+     * @Route("/breweries/{id}", name="patch_brewery", methods={"PATCH"}, requirements={"id"="\d+"})
+     * @param Request $request
+     * @return Response
+     */
+    public function patch(Request $request) :Response
+    {
+        $breweryId = $request->attributes->get('id');
+
+        $brewery = $this->getDoctrine()->getRepository(Brewery::class)->find($breweryId);
+        if (empty($brewery)) {
+                throw $this->createNotFoundException(
+                    'No product found for id '. $breweryId
+                );
+        }
+
+        $response = $this->patchEntity($request, BreweryDTO::class, $this->breweryAssembler, $brewery);
+
+        return $response;
     }
+
 
     /**
      * @Route("/breweries/{id}", name="delete_brewery", methods={"DELETE"}, requirements={"id"="\d+"})
