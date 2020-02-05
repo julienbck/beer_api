@@ -24,7 +24,7 @@ class UserDTO
      * @Assert\Type("string")
      * @Assert\NotBlank
      */
-    protected $pseudo;
+    protected $username;
 
     /**
      * @Assert\Type("string")
@@ -70,18 +70,18 @@ class UserDTO
     /**
      * @return mixed
      */
-    public function getPseudo()
+    public function getUsername()
     {
-        return $this->pseudo;
+        return $this->username;
     }
 
     /**
-     * @param mixed $pseudo
+     * @param mixed $username
      * @return UserDTO
      */
-    public function setPseudo($pseudo)
+    public function setUsername($username)
     {
-        $this->pseudo = $pseudo;
+        $this->username = $username;
         return $this;
     }
 
