@@ -29,14 +29,16 @@ class QueryParamValidator
 
         foreach ($queryAnnotations as $annotation) {
             if ($annotation->required && !array_key_exists($annotation->name, $queryParams)) {
-                throw new BadRequestHttpException('Parameter '.$annotation->name.' was required');
+                throw new BadRequestHttpException('Parameter ' . $annotation->name . ' was required');
             }
-            foreach ($queryParams as $name => $param) {
-                if ($name == $annotation->name) {
+        }
+           foreach ($queryParams as $name => $param) {
+               foreach ($queryAnnotations as $annotation) {
+                   if ($name == $annotation->name) {
                     // CHECK TYPE INTEGER
                     if ($annotation->type == "integer") {
                         if(!is_numeric($param)) {
-                            throw new BadRequestHttpException('Invalid Parameters.'.$name.' must be integer');
+                            throw new BadRequestHttpException('Invalid Parameters: '.$name.' must be integer');
                         }
 
                         if(!preg_match($annotation->requirements, intval($param))) {
@@ -47,14 +49,14 @@ class QueryParamValidator
                     //CHECK TYPE STRING
                     if ($annotation->type == "string") {
                         if (!is_string($param)) {
-                            throw new BadRequestHttpException('Invalid Parameters.' . $name . ' must be string');
+                            throw new BadRequestHttpException('Invalid Parameters: ' . $name . ' must be string');
                         }
 
                         if (is_string($param) && !(substr($param, 0, 1) === '/' && substr($param, 0, 1) === '(')) {
                             $values = explode("|", $annotation->requirements);
                             $check = in_array($param, $values);
                             if (!$check) {
-                                throw new BadRequestHttpException('Invalid Parameters.'.$name.' must need to value: '.implode(" or ", $values));
+                                throw new BadRequestHttpException('Invalid Parameters: '.$name.' must need to value: '.implode(" or ", $values));
                             }
                         }
                     }
