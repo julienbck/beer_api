@@ -54,6 +54,7 @@ class BreweryController extends AbstractRestController
         $response->headers->set('totalHits', $results['totalHits']);
         $response->headers->set('totalPage', $results['totalPage']);
         $response->headers->set('nextPage', $results['nextPage']);
+        $response->headers->set('Content-type', 'application/json');
 
         return $response;
     }
@@ -68,7 +69,7 @@ class BreweryController extends AbstractRestController
         $brewery = $this->getOneEntity(Brewery::class, $request->get('id'));
         $json = $this->serialize($brewery, ['brewery-collection']);
 
-        return new Response($json, 200);
+        return new Response($json, 200, ['Content-type' => 'application/json']);
     }
 
     /**

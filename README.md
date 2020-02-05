@@ -15,7 +15,9 @@ Les specifications se trouvent dans le dossier `doc/spec`.
 
 > Make aussi doit etre installer
 
-Pour lancer l'initialisation de la stack faire un make setup, les conteneur seront construit et demarrer.
+Pour lancer l'initialisation de la stack faire un `make serve`, les conteneurs seront construits et démareés.
 une fois lander make vendor provisionnera les vendors.
+
+Si on rencontre une erreur durant l'installation de la base de donnée avec le `make serve`, il faut lancer un `make db`
 
 Pour avoir plus d'informations sur les differentes commande disponible avec make juste faire `make`
