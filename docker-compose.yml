@@ -53,7 +53,8 @@ services:
             interval: 3s
             timeout: 1s
             retries: 5
-
+        networks:
+            - beer_checkin_back
 
     phpmyadmin:
         container_name: ${COMPOSE_PROJECT_NAME}_pma

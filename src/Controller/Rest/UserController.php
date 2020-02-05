@@ -33,7 +33,7 @@ class UserController extends AbstractRestController
     }
 
     /**
-     * @Route("/user", name="create_user", methods={"POST"})
+     * @Route("/user/register", name="create_user", methods={"POST"})
      * @param Request $request
      * @return Response
      */

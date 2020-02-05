@@ -25,6 +25,7 @@ reset: ## Remove all containers
 
 install: ## Install PHP and frontend dependencies, also install and dump assets
 	$(RUN) composer install --no-interaction
+	$(RUN) chown www-data -R config/jwt/
 
 cc: ## Run cache clear and cache warmup
 	$(RUN) bin/console cache:clear --no-warmup

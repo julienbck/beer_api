@@ -12,9 +12,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @UniqueEntity(
- *     fields={"username", "email"}
- * )
  */
 class User implements UserInterface
 {
@@ -26,7 +23,7 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $email;
 
@@ -41,7 +38,7 @@ class User implements UserInterface
     private $roles = [];
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $username;
 
