@@ -83,7 +83,7 @@ class BeerController extends AbstractRestController
     /**
      * @Route("/beers", name="post_beer", methods={"POST"})
      * @param Request $request
-     * @return JsonResponse
+     * @return Response
      */
     public function post(Request $request) :Response
     {
