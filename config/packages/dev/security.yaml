@@ -1,0 +1,8 @@
+security:
+
+    firewalls:
+        login:
+           security: true
+
+        api:
+            security: true

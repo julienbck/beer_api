@@ -21,3 +21,37 @@ une fois lander make vendor provisionnera les vendors.
 Si on rencontre une erreur durant l'installation de la base de donnée avec le `make serve`, il faut lancer un `make db`
 
 Pour avoir plus d'informations sur les differentes commande disponible avec make juste faire `make`
+
+---
+**DOC API**
+
+Pour accéder à la doc API et au swagger :
+`/api/doc`
+
+**GENERATION TOKEN**
+
+Pour générer un token:
+`/api/login_check` ; <br>
+Method: `POST` ; <br>
+body JSON: 
+``` json
+{  
+    "username" : "testnom", 
+    "password" : "password"
+}
+```
+
+**CREATION UTILISATEUR**
+
+Pour générer un token:
+`/api/user/register` ; <br>
+Method: `POST` ; <br>
+body JSON: 
+``` json
+{  
+    "username" : "testnom", 
+    "password" : "password",
+    "email" : "mon@email.com",
+    "avatar" : "http://google.com/mon-image.jpg"  #optional
+}
+```

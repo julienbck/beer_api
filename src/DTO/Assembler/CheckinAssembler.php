@@ -11,6 +11,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 use Symfony\Component\VarExporter\Exception\ClassNotFoundException;
 
@@ -21,14 +23,19 @@ class CheckinAssembler
      * @var EntityManagerInterface
      */
     private $em;
+    /**
+     * @var TokenStorageInterface
+     */
+    private $storage;
 
     /**
      * CheckinAssembler constructor.
      * @param EntityManagerInterface $em
      */
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, TokenStorageInterface $storage)
     {
         $this->em = $em;
+        $this->storage = $storage;
     }
 
     public function hydrateEntity(CheckinDTO $checkinDTO)
@@ -45,6 +52,7 @@ class CheckinAssembler
             $checkin
                 ->setNote($checkinDTO->getNote())
                 ->setBeer($beer)
+                ->setUser($this->storage->getToken()->getUser())
                 ->setCreatedAt(new \DateTime())
                 ->setUpdatedAt(new \DateTime());
 
@@ -62,6 +70,10 @@ class CheckinAssembler
 
         if (is_null($checkinDTO->getNote()) || ($checkinDTO->getNote() < 0) || ($checkinDTO->getNote() > 10)) {
             throw new BadRequestHttpException('Need value integer for note between 0 to 10');
+        }
+
+        if ($checkin->getUser()->getId() == $this->storage->getToken()->getUser()->getId()) {
+            throw new AccessDeniedException('You are not maker of checkins');
         }
 
         $checkin->setNote($checkinDTO->getNote());
