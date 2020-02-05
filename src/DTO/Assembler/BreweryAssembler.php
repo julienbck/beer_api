@@ -54,6 +54,10 @@ class BreweryAssembler
             $brewery->setCity($breweryDTO->getCity());
         }
 
+        if (!is_null($breweryDTO->getCountry())) {
+            $brewery->setCountry($breweryDTO->getCountry());
+        }
+
         $brewery->setUpdatedAt(new \DateTime());
 
         return $brewery;

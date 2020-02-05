@@ -13,7 +13,18 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use App\Common\QueryAnnotation;
+use Swagger\Annotations as SWG;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use Nelmio\ApiDocBundle\Annotation\Model;
 
+/**
+ * Class UserController
+ * @package App\Controller\Rest
+ *
+ * @SWG\Tag(name="User")
+ * @Security(name="Bearer")
+ */
 class UserController extends AbstractRestController
 {
     /**
@@ -35,6 +46,12 @@ class UserController extends AbstractRestController
     }
 
     /**
+     * @SWG\Response(
+     *     response=200,
+     *     description="Return collection of beers",
+     *     @Model(type=User::class),
+     * )
+     *
      * @Route("/user/{id}", name="get_user", methods={"GET"}, requirements={"id"="\d+"})
      * @param Request $request
      * @return Response
@@ -48,12 +65,18 @@ class UserController extends AbstractRestController
         if (empty($user)) {
             return new Response(sprintf('User not found with id: %d', $idRessource), 404);
         }
+
         $json = $this->serialize($user, ['user-details-public', 'checkin-details']);
 
         return new Response($json, 200, ['Content-type' => 'application/json']);
     }
 
     /**
+     * @SWG\Response(
+     *     response=201,
+     *     description="Create user",
+     * )
+     *
      * @Route("/user/register", name="create_user", methods={"POST"})
      * @param Request $request
      * @return Response
@@ -66,6 +89,11 @@ class UserController extends AbstractRestController
     }
 
     /**
+     * @SWG\Response(
+     *     response=201,
+     *     description="Update user",
+     * )
+     *
      * @Route("/user/{id}", name="patch_user", methods={"PATCH"}, requirements={"id"="\d+"})
      * @param Request $request
      * @return Response
@@ -81,5 +109,32 @@ class UserController extends AbstractRestController
         $response = $this->patchEntity($request, UserDTO::class, $this->userAssembler, $this->getUser());
 
         return $response;
+    }
+
+    /**
+     * @SWG\Response(
+     *     response=201,
+     *     description="Delete user",
+     * )
+     *
+     * @Route("/user/{id}", name="delete_user", methods={"DELETE"}, requirements={"id"="\d+"})
+     * @param Request $request
+     * @return Response
+     */
+    public function deleteOne(Request $request):Response
+    {
+        $idRessource = $request->get('id') ? $request->get('id') : null;
+
+        if (empty($idRessource)) {
+            new Response(null, 404);
+        }
+
+        if ($idRessource != $this->getUser()->getId()) {
+            throw new AccessDeniedException('Not allowed to delete this profile because your are not owner');
+        }
+
+        $resp = $this->delete(User::class, $idRessource);
+
+        return $resp;
     }
 }

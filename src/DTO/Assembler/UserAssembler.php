@@ -53,6 +53,9 @@ class UserAssembler
     public function hydrateEntityPatch(UserDTO $userDTO, User $user): User
     {
         if (!is_null($userDTO->getEmail())) {
+            if (!filter_var($userDTO->getEmail(), FILTER_VALIDATE_EMAIL)) {
+                throw new JsonNotValid('Not good email format');
+            }
             $user->setEmail($userDTO->getEmail());
         }
 
