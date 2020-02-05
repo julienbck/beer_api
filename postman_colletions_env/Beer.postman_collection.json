@@ -1,0 +1,222 @@
+{
+	"info": {
+		"_postman_id": "6a67bd49-174a-4ba4-8f1b-0d66c97556bd",
+		"name": "Beer",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Collection beers",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE1ODA5MjUyMjIsImV4cCI6MTU4MDkyODgyMiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoianVib2NrIn0.kD5D7geG0CdR_Kx9FFnXcD2Zq0TT6Ec8pvMGwmMTy14K7HwYHcVRnZGmY-oBhDIxvkoI4WyEWXlmPp_6lb7x2PTnKmkZfYV5XVuRLUCQOlMvFDI-a0sa-t3XP5GlPcquCqWbXf_NwbKuP_eO3vkscY2300IyhJCKjWGytIn9jiqXOUS5kWTsroFHp2WsjN8b94I2Ur3lYPDWbeUXC6kW0kWu4_-p963A_l9Wu_TSUoAc3Oj9LL5igCMAmCcKRK4oyx730aEcwty5UTNn3piTVofk0rB0pFyYjXHwQ-weQA27nAC2lMp_gn8GzFXP7CVUBAaI_nqP751FWl3TDQkuHXjwOkO0fKWh7C8uJNoWURSBzFJTaKWOSUG5xuYM0o3NWl5lsnnwuNpAfAgNAor1CVy_pIWSsUDV9fdiQtuWpI1fPx8xn_pMVBXZdQylK7-1uwOCGo19ZCKdjlib8Bbt3RMkoOR-9O4BQWlcCy0ZiQVT7w__aTQTVWFXXpHNXGMboSVza3yOx-NlT_sZojEwThxWU6O_dgKU1QkhzYsvqcb8KlUjhrJ2_UN0i0JecaSLGDderHpYtJqvRK8BtMDt7WtAELxaT4Bup_nIzgIJhBDiuizGxmHkWBG_ARXh6QmhSYjjnmaPOA5VcQL--dzjTHe2e4Tqc53RwYfWrr7u7qg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://beer.localhost/api/beers?page=10&limit=20",
+					"protocol": "http",
+					"host": [
+						"beer",
+						"localhost"
+					],
+					"path": [
+						"api",
+						"beers"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "10"
+						},
+						{
+							"key": "limit",
+							"value": "20"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update beer",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"La biere de pontivy\",\n\t\"abv\": 45,\n\t\"ibu\": 55,\n\t\"brewery_id\": 1426,\n\t\"style_id\": 65\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://beer.localhost/api/beers/5918",
+					"protocol": "http",
+					"host": [
+						"beer",
+						"localhost"
+					],
+					"path": [
+						"api",
+						"beers",
+						"5918"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Filter beer by ibu or abv",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://beer.localhost/api/beers/filter/max?",
+					"protocol": "http",
+					"host": [
+						"beer",
+						"localhost"
+					],
+					"path": [
+						"api",
+						"beers",
+						"filter",
+						"max"
+					],
+					"query": [
+						{
+							"key": "attribute",
+							"value": "ibu",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sort Beer by ABV",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://beer.localhost/api/beers/abv/sort",
+					"protocol": "http",
+					"host": [
+						"beer",
+						"localhost"
+					],
+					"path": [
+						"api",
+						"beers",
+						"abv",
+						"sort"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create beer",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": {\"test\": \"test\"},\n\t\"abv\": 45,\n\t\"ibu\": 55,\n\t\"brewery_id\": 5678,\n\t\"style_id\": 567\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://beer.localhost/api/beers",
+					"protocol": "http",
+					"host": [
+						"beer",
+						"localhost"
+					],
+					"path": [
+						"api",
+						"beers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Beer by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://beer.localhost/api/beers/5",
+					"protocol": "http",
+					"host": [
+						"beer",
+						"localhost"
+					],
+					"path": [
+						"api",
+						"beers",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete beer",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{bearer_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://beer.localhost/api/beers/6",
+					"protocol": "http",
+					"host": [
+						"beer",
+						"localhost"
+					],
+					"path": [
+						"api",
+						"beers",
+						"6"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

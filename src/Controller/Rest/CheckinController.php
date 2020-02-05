@@ -59,6 +59,25 @@ class CheckinController extends AbstractRestController
     }
 
     /**
+     * @Route("/checkins/{id}", name="get_checkin", methods={"GET"}, requirements={"id"="\d+"})
+     * @param Request $request
+     * @return Response
+     */
+    public function getOne(Request $request): Response
+    {
+        $idRessource = $request->get('id') ? $request->get('id') : null;
+
+        $beer = $this->getOneEntity(Checkin::class, $idRessource);
+
+        if (empty($beer)) {
+            return new Response(sprintf('Not checkin found with id: %d', $idRessource), 404);
+        }
+        $json = $this->serialize($beer, ['checkin-details', 'beer-collection']);
+
+        return new Response($json, 200, ['Content-type' => 'application/json']);
+    }
+
+    /**
      * @Route("/checkins", name="post_checkins", methods={"POST"})
      * @param Request $request
      * @return Response
@@ -89,5 +108,23 @@ class CheckinController extends AbstractRestController
         $response = $this->patchEntity($request, CheckinDTO::class, $this->checkinAssembler, $checkin);
 
         return $response;
+    }
+
+    /**
+     * @Route("/checkins/{id}", name="delete_delete", methods={"DELETE"}, requirements={"id"="\d+"})
+     * @param Request $request
+     * @return Response
+     */
+    public function deleteOne(Request $request):Response
+    {
+        $idRessource = $request->get('id') ? $request->get('id') : null;
+
+        if (empty($idRessource)) {
+            new Response(null, 404);
+        }
+
+        $resp = $this->delete(Checkin::class, $idRessource);
+
+        return $resp;
     }
 }

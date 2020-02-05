@@ -28,4 +28,18 @@ class UserRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function getOneById($id)
+    {
+        $qb = $this->createQueryBuilder('u');
+
+        $qb
+            ->addSelect('c, b')
+            ->join('u.checkins', 'c')
+            ->join('c.beer', 'b')
+            ->where('u.id = :id')
+            ->setParameter('id', $id);
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
 }

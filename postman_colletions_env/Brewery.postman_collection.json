@@ -1,0 +1,189 @@
+{
+	"info": {
+		"_postman_id": "638cd47b-b6e6-4eec-9ee0-ecbc3e1354f9",
+		"name": "Brewery",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Brewery by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://beer.localhost/api/breweries/5",
+					"protocol": "http",
+					"host": [
+						"beer",
+						"localhost"
+					],
+					"path": [
+						"api",
+						"breweries",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Collection breweries",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://beer.localhost/api/breweries?page=1&limit=10",
+					"protocol": "http",
+					"host": [
+						"beer",
+						"localhost"
+					],
+					"path": [
+						"api",
+						"breweries"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update brewery",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"name\" : \"Brasserie Pontivy\",\n\"city\":\"Pontivy\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://beer.localhost/api/breweries/5400",
+					"protocol": "http",
+					"host": [
+						"beer",
+						"localhost"
+					],
+					"path": [
+						"api",
+						"breweries",
+						"5400"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get number brewery by country",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://beer.localhost/api/breweries/country/counter?sort=ASC",
+					"protocol": "http",
+					"host": [
+						"beer",
+						"localhost"
+					],
+					"path": [
+						"api",
+						"breweries",
+						"country",
+						"counter"
+					],
+					"query": [
+						{
+							"key": "sort",
+							"value": "ASC"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create brewery",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Compagnies biere loudeac\",\n\t\"city\": \"Loudeac\",\n\t\"postalCode\": \"22600\",\n\t\"country\": \"FRANCE\",\n\t\"address\": \"Rue hemonstoir\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://beer.localhost/api/breweries",
+					"protocol": "http",
+					"host": [
+						"beer",
+						"localhost"
+					],
+					"path": [
+						"api",
+						"breweries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete brewery",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{bearer_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://beer.localhost/api/breweries/2",
+					"protocol": "http",
+					"host": [
+						"beer",
+						"localhost"
+					],
+					"path": [
+						"api",
+						"breweries",
+						"2"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

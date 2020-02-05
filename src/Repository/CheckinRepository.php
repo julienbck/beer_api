@@ -30,4 +30,17 @@ class CheckinRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function getOneById($id)
+    {
+        $qb = $this->createQueryBuilder('c');
+
+        $qb
+            ->addSelect('b')
+            ->leftJoin('c.beer', 'b')
+            ->where('c.id = :id')
+            ->setParameter('id', $id);
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
 }

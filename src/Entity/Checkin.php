@@ -18,22 +18,26 @@ class Checkin
     private $id;
 
     /**
+     * @Groups({"checkin-details", "user-details-public"})
      * @ORM\Column(type="float")
      */
     private $note;
 
     /**
+     * @Groups({"checkin-details"})
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
 
     /**
+     * @Groups({"checkin-details"})
      * @ORM\Column(type="datetime")
      */
     private $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Beer", inversedBy="checkins")
+     * @Groups({"checkin-details", "user-details-public"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $beer;

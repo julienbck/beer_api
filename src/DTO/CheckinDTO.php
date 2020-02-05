@@ -8,11 +8,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CheckinDTO
 {
     /**
-     * @Assert\Type("integer")
+     * @Assert\Type("float")
      * @Assert\LessThanOrEqual("10")
      * @Assert\GreaterThanOrEqual("0")
      * @Assert\NotBlank()
-     * @var integer
+     * @var float
      */
     protected $note;
 
@@ -24,18 +24,18 @@ class CheckinDTO
     protected $beerId;
 
     /**
-     * @return int
+     * @return float
      */
-    public function getNote(): int
+    public function getNote(): float
     {
         return $this->note;
     }
 
     /**
-     * @param int $note
+     * @param float $note
      * @return CheckinDTO
      */
-    public function setNote(int $note): CheckinDTO
+    public function setNote(float $note): CheckinDTO
     {
         $this->note = $note;
         return $this;
