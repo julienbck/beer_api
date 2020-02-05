@@ -1,51 +1,41 @@
-.PHONY: docker-build start stop down install setup php destroy down migrate diff require help bash require reset_bdd fixtures
+.DEFAULT_GOAL := help
+.PHONY: all build start stop reset install cc db
 
-.DEFAULT_GOAL: help
+COMPOSE=docker-compose
+RUN=$(COMPOSE) run --rm php
+EXEC=docker exec -ti php
 
-CONTAINER="php"
+serve: reset build start install db ## Prepare the dev env
 
-COMMAND=""
+build: ## Build docker images
+	$(COMPOSE) build
 
-COMPOSE_DEV_FILE= 'docker-compose-dev.yml'
+start: ## Start the app
+	$(COMPOSE) up -d --remove-orphans
 
-RUN_ACL:= sudo setfacl -dR -m u:$(whoami):rwX -m u:1000:rwX ./ && sudo setfacl -R -m u:$(whoami):rwX -m u:1000:rwX ./
+stop: ## Stop the app
+	$(COMPOSE) stop
 
-PROJECT_PATH_BACK = $(shell echo ${PWD})
+down: ## Stop the app and remove containers
+	$(COMPOSE) down
+
+reset: ## Remove all containers
+	$(COMPOSE) kill
+	$(COMPOSE) rm -fv
+
+install: ## Install PHP and frontend dependencies, also install and dump assets
+	$(RUN) composer install --no-interaction
+
+cc: ## Run cache clear and cache warmup
+	$(RUN) bin/console cache:clear --no-warmup
+	$(RUN) bin/console cache:warmup
+
+db: ## Initialize the database
+	$(RUN) bin/console doctrine:database:drop --force --if-exists -n
+	$(RUN) bin/console doctrine:database:create -n
+	$(RUN) bin/console doctrine:schema:create -n
+	$(RUN) bin/console load:data-fixture open-beer-database.csv
 
 help:
-	@grep -E '(^[a-zA-Z_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[32m%-10s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-build: ## Lance le build des conteneur docker
-	docker-compose -f docker-compose.yml build
-
-start: ## Demmare les conteneurs docker
-	docker-compose -f docker-compose.yml up -d
-
-stop: ## Arrete les conteneurs docker
-	docker-compose -f docker-compose.yml stop
-
-destroy: ## Arretes les conteneurs en detruisant les conteneurs, volumes et network associee.
-	docker-compose -f docker-compose.yml  down --volumes
-
-composer.lock: composer.json ## Composer update
-	docker run --rm -v ${PWD}:/app composer:latest composer update --with-dependencies --no-interaction --ignore-platform-reqs
-
-vendor: composer.json ## Composer install
-	docker run --rm -v ${PWD}:/app composer:latest composer install --no-interaction --ignore-platform-reqs
-
-require: ## Composer require
-	docker run --rm -v ${PWD}:/app composer:latest composer require ${PKG} --no-interaction --ignore-platform-reqs
-
-dump-autoload: ## Composer dump-autoload
-	docker run --rm -v ${PWD}:/app composer:latest composer dump-autoload -a
-
-bash: ## Connexion a un conteneur par defaut php. Renseigner CONTAINER="nom du conteneur" pour ce connecter a un conteneur
-	docker-compose -f docker-compose.yml  exec -u 33:33 $(CONTAINER) bash
-
-setup: acl .env build start ## Tache d'initialisation de l'environnement
-
-.env.local: .env
-	cp .env .env.local
-
-acl: ## Donne les droits d'ecriture sur le dossier
-	$(RUN_ACL)
