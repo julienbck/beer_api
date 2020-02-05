@@ -39,8 +39,8 @@ class UserAssembler
 
         $newUser
             ->setEmail($userDTO->getEmail())
-            ->setPseudo($userDTO->getPseudo())
-            ->setRole(['ROLE_USER'])
+            ->setUsername($userDTO->getUsername())
+            ->setRoles(['ROLE_USER'])
             ->setCreatedAt(new \DateTime())
             ->setUpdatedAt(new \DateTime());
 

@@ -1,4 +1,4 @@
-FROM php:7.3-apache
+FROM php:7.4-apache
 
 # Dépendences nécessaires pour les extensions PHP, plus Wget/Git/SSH
 RUN apt-get update && apt-get install --no-install-recommends -yq ${BUILD_PACKAGES} \
