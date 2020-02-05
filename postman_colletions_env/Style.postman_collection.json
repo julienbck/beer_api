@@ -1,0 +1,111 @@
+{
+	"info": {
+		"_postman_id": "bfe5043b-e3fe-4b3c-954f-c933ee2e9ab5",
+		"name": "Style",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Delete style",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://beer.localhost/api/styles/1",
+					"protocol": "http",
+					"host": [
+						"beer",
+						"localhost"
+					],
+					"path": [
+						"api",
+						"styles",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get number beer by style",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://beer.localhost/api/styles/beers/counter?sort=TOTO",
+					"protocol": "http",
+					"host": [
+						"beer",
+						"localhost"
+					],
+					"path": [
+						"api",
+						"styles",
+						"beers",
+						"counter"
+					],
+					"query": [
+						{
+							"key": "sort",
+							"value": "TOTO"
+						},
+						{
+							"key": "style_id",
+							"value": "89",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update style",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE1ODA5MzYzNjYsImV4cCI6MTU4MDkzOTk2Niwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoianVib2NrIn0.Fs5apayQBzlw76HhRtvSFEqO-_PijdeaRNI06bZeN3Mr__PbU3OXJ81hcBIDw_a-NomGEpYPFNsxXUCdyxLFkPEIM-mVKIlta6kAr8ig_TsXgcMSJZjW19d-OzDB1OQTNdMptkCFZ6MUI3BmOqnwquYjof9KdPDZ6wuxdqintIjrotItkgNfJBYUVAn2qA4pvA0wmmOsahIsVako_NOIpu7zXgfxYp5u55z6fljFwfQQAOxmtfSg6IHJ_dQPPljJ68qSuXlZxON4-dAfAETgMiK6afZy1izwdlJgF29migtM-NCuO1hIdxM6DRTgGn7GpWpzTrkitOiIT77sZYKyXZJR1a4hD8VLylx5e_sMFt3AbbJ0_JCr2-cGvFtpBvvjX-xj4Q8ioq9eKuT1QL6t5VpsVzOVmOgRUdYRypfHykB5JOwbUbKIOwNusUMsQrVnD3rlWne2V4aYCt986REF5pJUzl9g-76XqENbpEi8jFsGmbmQMel9gxbXfWK2ft1IHL7p26szZGLk5iHkUyBDHH-FnSWAvPC2Qem1f5jW5AZHJX84wz7pq1fPyTJY2ULV1-68-Cpwwhm-TWnvcs2kzrkcxMtzXvnh4a1EyYnTwaGaYkQu7ieWm0rHWNe4QXjPX6-tYkIg1alVt0WqAzD0j0s46tOcOnBpUxZ353L37-M",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"nouvelle biere style\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://beer.localhost/api/styles/67",
+					"protocol": "http",
+					"host": [
+						"beer",
+						"localhost"
+					],
+					"path": [
+						"api",
+						"styles",
+						"67"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

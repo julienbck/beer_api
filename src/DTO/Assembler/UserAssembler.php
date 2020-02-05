@@ -6,6 +6,7 @@ namespace App\DTO\Assembler;
 
 use App\DTO\UserDTO;
 use App\Entity\User;
+use Doctrine\Migrations\Configuration\Exception\JsonNotValid;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
 use Symfony\Component\Security\Core\Encoder\SodiumPasswordEncoder;
@@ -47,5 +48,24 @@ class UserAssembler
         $newUser->setPassword($this->passwordEncoder->encodePassword($newUser, $userDTO->getPassword()));
 
         return $newUser;
+    }
+
+    public function hydrateEntityPatch(UserDTO $userDTO, User $user): User
+    {
+        if (!is_null($userDTO->getEmail())) {
+            $user->setEmail($userDTO->getEmail());
+        }
+
+        if (!is_null($userDTO->getUsername())) {
+            throw new JsonNotValid('Not possible edit username');
+        }
+
+        if (!is_null($userDTO->getAvatar())) {
+            $user->setAvatar($userDTO->getAvatar());
+        }
+
+        $user->setUpdatedAt(new \DateTime());
+
+        return $user;
     }
 }

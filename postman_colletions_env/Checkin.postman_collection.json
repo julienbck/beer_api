@@ -1,0 +1,129 @@
+{
+	"info": {
+		"_postman_id": "7e28a3d4-68eb-4b7c-9088-dea729305a93",
+		"name": "Checkin",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create checkin",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE1ODA5MzYzNjYsImV4cCI6MTU4MDkzOTk2Niwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoianVib2NrIn0.Fs5apayQBzlw76HhRtvSFEqO-_PijdeaRNI06bZeN3Mr__PbU3OXJ81hcBIDw_a-NomGEpYPFNsxXUCdyxLFkPEIM-mVKIlta6kAr8ig_TsXgcMSJZjW19d-OzDB1OQTNdMptkCFZ6MUI3BmOqnwquYjof9KdPDZ6wuxdqintIjrotItkgNfJBYUVAn2qA4pvA0wmmOsahIsVako_NOIpu7zXgfxYp5u55z6fljFwfQQAOxmtfSg6IHJ_dQPPljJ68qSuXlZxON4-dAfAETgMiK6afZy1izwdlJgF29migtM-NCuO1hIdxM6DRTgGn7GpWpzTrkitOiIT77sZYKyXZJR1a4hD8VLylx5e_sMFt3AbbJ0_JCr2-cGvFtpBvvjX-xj4Q8ioq9eKuT1QL6t5VpsVzOVmOgRUdYRypfHykB5JOwbUbKIOwNusUMsQrVnD3rlWne2V4aYCt986REF5pJUzl9g-76XqENbpEi8jFsGmbmQMel9gxbXfWK2ft1IHL7p26szZGLk5iHkUyBDHH-FnSWAvPC2Qem1f5jW5AZHJX84wz7pq1fPyTJY2ULV1-68-Cpwwhm-TWnvcs2kzrkcxMtzXvnh4a1EyYnTwaGaYkQu7ieWm0rHWNe4QXjPX6-tYkIg1alVt0WqAzD0j0s46tOcOnBpUxZ353L37-M",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"note\": 7,\n\t\"beerId\": 18\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://beer.localhost/api/checkins",
+					"protocol": "http",
+					"host": [
+						"beer",
+						"localhost"
+					],
+					"path": [
+						"api",
+						"checkins"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update checkin",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"note\": 4\n}"
+				},
+				"url": {
+					"raw": "http://beer.localhost/api/checkins/6",
+					"protocol": "http",
+					"host": [
+						"beer",
+						"localhost"
+					],
+					"path": [
+						"api",
+						"checkins",
+						"6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get checkin by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://beer.localhost/api/checkins/6",
+					"protocol": "http",
+					"host": [
+						"beer",
+						"localhost"
+					],
+					"path": [
+						"api",
+						"checkins",
+						"6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete checkins",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{bearer_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://beer.localhost/api/checkins/2",
+					"protocol": "http",
+					"host": [
+						"beer",
+						"localhost"
+					],
+					"path": [
+						"api",
+						"checkins",
+						"2"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

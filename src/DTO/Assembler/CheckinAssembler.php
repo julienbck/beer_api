@@ -73,7 +73,7 @@ class CheckinAssembler
         }
 
         if ($checkin->getUser()->getId() == $this->storage->getToken()->getUser()->getId()) {
-            throw new AccessDeniedException('You are not maker of checkins');
+            throw new AccessDeniedException('Not allowed to update checkins other member');
         }
 
         $checkin->setNote($checkinDTO->getNote());
