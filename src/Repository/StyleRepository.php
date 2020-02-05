@@ -19,7 +19,7 @@ class StyleRepository extends ServiceEntityRepository
         parent::__construct($registry, Style::class);
     }
 
-    public function getCollection()
+    public function getCollection($requestQuery)
     {
         $qb = $this->createQueryBuilder('s');
 
@@ -38,5 +38,24 @@ class StyleRepository extends ServiceEntityRepository
             ->setParameter('id', $id);
 
         return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    public function getNumberBeersByStyle($sortVal, $styleId)
+    {
+        $qb = $this->createQueryBuilder('s');
+
+        $qb
+            ->select('s.id, s.name, COUNT(b.id) as totalBreweries')
+            ->join('s.beers', 'b')
+            ->orderBy('totalBreweries', $sortVal ? $sortVal : "DESC")
+            ->groupBy('s.id');
+
+        if (!empty($styleId)) {
+            $qb
+                ->where('s.id = :styleId')
+                ->setParameter('styleId', $styleId);
+        }
+
+        return $qb->getQuery()->getScalarResult();
     }
 }

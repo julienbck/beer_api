@@ -55,7 +55,7 @@ class AbstractRestController extends AbstractController
             $limit = (int) $requestQuery->get('limit');
         }
 
-        $qb =  $this->getDoctrine()->getRepository($className)->getCollection();
+        $qb =  $this->getDoctrine()->getRepository($className)->getCollection($requestQuery);
         $adapter = new DoctrineORMAdapter($qb);
         $pagerfanta = new Pagerfanta($adapter);
         $pagerfanta->setMaxPerPage($limit);

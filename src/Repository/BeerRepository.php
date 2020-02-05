@@ -20,16 +20,30 @@ class BeerRepository extends ServiceEntityRepository
         parent::__construct($registry, Beer::class);
     }
 
-    public function getCollection()
+    public function getCollection($requestQuery)
     {
+        $sortDescAttribute = $requestQuery->get('sort_desc_by_attribute');
+        $sortAscAttribute = $requestQuery->get('sort_asc_by_attribute');
+
         $qb = $this->createQueryBuilder('b');
 
         $qb
             ->addSelect('br, s')
             ->join('b.brewery', 'br')
-            ->leftJoin('b.style', 's')
-            ->orderBy('b.id', 'ASC')
-            ->setMaxResults(2);
+            ->leftJoin('b.style', 's');
+
+        if ((empty($sortDescAttribute) && empty($sortAscAttribute))  || (!empty($sortDescAttribute) && !empty($sortAscAttribute))) {
+            $qb->orderBy('b.id', 'ASC');
+        }
+
+        if (!empty($sortDescAttribute) && empty($sortAscAttribute)) {
+            $qb->orderBy('b.'.$sortDescAttribute, 'DESC');
+        }
+
+
+        if (!empty($sortAscAttribute) && empty($sortDescAttribute)) {
+            $qb->orderBy('b.'.$sortAscAttribute, 'DESC');
+        }
 
         return $qb->getQuery();
     }
