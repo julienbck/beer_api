@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -68,6 +70,16 @@ class Beer
      * @Groups({"beer-collection", "beer-details"})
      */
     private $style;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Checkin", mappedBy="beer", orphanRemoval=true)
+     */
+    private $checkins;
+
+    public function __construct()
+    {
+        $this->checkins = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -164,4 +176,36 @@ class Beer
 
         return $this;
     }
+
+    /**
+     * @return Collection|Checkin[]
+     */
+    public function getCheckins(): Collection
+    {
+        return $this->checkins;
+    }
+
+    public function addCheckin(Checkin $checkin): self
+    {
+        if (!$this->checkins->contains($checkin)) {
+            $this->checkins[] = $checkin;
+            $checkin->setBeer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCheckin(Checkin $checkin): self
+    {
+        if ($this->checkins->contains($checkin)) {
+            $this->checkins->removeElement($checkin);
+            // set the owning side to null (unless already changed)
+            if ($checkin->getBeer() === $this) {
+                $checkin->setBeer(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

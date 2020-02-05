@@ -23,12 +23,6 @@ class Checkin
     private $note;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Beer", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $beer;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
@@ -37,6 +31,18 @@ class Checkin
      * @ORM\Column(type="datetime")
      */
     private $updatedAt;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Beer", inversedBy="checkins")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $beer;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="checkins")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
 
     public function getId(): ?int
     {
@@ -51,18 +57,6 @@ class Checkin
     public function setNote(float $note): self
     {
         $this->note = $note;
-
-        return $this;
-    }
-
-    public function getBeer(): ?Beer
-    {
-        return $this->beer;
-    }
-
-    public function setBeer(Beer $beer): self
-    {
-        $this->beer = $beer;
 
         return $this;
     }
@@ -87,6 +81,30 @@ class Checkin
     public function setUpdatedAt(\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getBeer(): ?Beer
+    {
+        return $this->beer;
+    }
+
+    public function setBeer(?Beer $beer): self
+    {
+        $this->beer = $beer;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

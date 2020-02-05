@@ -54,6 +54,8 @@ class StyleController extends AbstractRestController
         $response->headers->set('totalHits', $results['totalHits']);
         $response->headers->set('totalPage', $results['totalPage']);
         $response->headers->set('nextPage', $results['nextPage']);
+        $response->headers->set('Content-type', 'application/json');
+
 
         return $response;
     }
@@ -68,7 +70,7 @@ class StyleController extends AbstractRestController
         $style =  $this->getOneEntity(Style::class, $request->get('id'));
         $json = $this->serialize($style, ['style-collection']);
 
-        return new Response($json, 200);
+        return new Response($json, 200, ['Content-type' => 'application/json']);
     }
 
     /**
