@@ -14,7 +14,17 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use App\Common\QueryAnnotation;
+use Swagger\Annotations as SWG;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use Nelmio\ApiDocBundle\Annotation\Model;
 
+/**
+ * Class StyleController
+ * @package App\Controller\Rest
+ *
+ * @SWG\Tag(name="Styles")
+ * @Security(name="Bearer")
+ */
 class StyleController extends AbstractRestController
 {
 
@@ -38,6 +48,14 @@ class StyleController extends AbstractRestController
     }
 
     /**
+     * @SWG\Response(
+     *     response=200,
+     *     description="Return collection of styles",
+     *     @Model(type=Style::class)
+     * )
+     * @SWG\Parameter(name="page", in="query", type="integer", description="Page to paginate result. Totalpage in response header")
+     * @SWG\Parameter(name="limit", in="query", type="integer", description="limit elements by page")
+     *
      * @Route("/styles", name="get_styles", methods={"GET"})
      * @param Request $request
      * @return Response
@@ -61,6 +79,12 @@ class StyleController extends AbstractRestController
     }
 
     /**
+     * @SWG\Response(
+     *     response=200,
+     *     description="Return style",
+     *     @Model(type=Style::class)
+     * )
+     *
      * @Route("/styles/{id}", name="get_style", methods={"GET"})
      * @param Request $request
      * @return Response
@@ -74,6 +98,18 @@ class StyleController extends AbstractRestController
     }
 
     /**
+     * @SWG\Response(
+     *     response=201,
+     *     description="Create style",
+     * )
+     * @SWG\Parameter(name="body", in="body", description="Elements needed to create style", type="json", required=true,
+     *      @SWG\Schema(
+     *          type="object",
+     *          @SWG\Property(property="name", type="string", example="Gold beer belgium GBB"
+     *          ),
+     *       )
+     *     )
+     *
      * @Route("/styles", name="post_styles", methods={"POST"})
      * @param Request $request
      * @return JsonResponse
@@ -86,6 +122,18 @@ class StyleController extends AbstractRestController
     }
 
     /**
+     * @SWG\Response(
+     *     response=204,
+     *     description="Update style",
+     * )
+     * @SWG\Parameter(name="body", in="body", description="Elements to update style", type="json", required=true,
+     *      @SWG\Schema(
+     *          type="object",
+     *          @SWG\Property(property="name", type="string", example="Gold beer belgium GBB"
+     *          ),
+     *       )
+     *     )
+     *
      * @Route("/styles/{id}", name="patch_styles", methods={"PATCH"})
      * @param Request $request
      * @return Response
@@ -107,6 +155,11 @@ class StyleController extends AbstractRestController
     }
 
     /**
+     * @SWG\Response(
+     *     response=201,
+     *     description="Delete style",
+     * )
+     *
      * @Route("/styles/{id}", name="delete_style", methods={"DELETE"}, requirements={"id"="\d+"})
      * @param Request $request
      * @return Response
@@ -125,6 +178,11 @@ class StyleController extends AbstractRestController
     }
 
     /**
+     * @SWG\Response(
+     *     response=200,
+     *     description="Return number of beers by style",
+     * )
+     *
      * @Route("/styles/beers/counter", name="get_styles_beers_quantity", methods={"GET"})
      * @param Request $request
      * @return Response

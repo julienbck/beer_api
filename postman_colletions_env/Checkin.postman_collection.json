@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "7e28a3d4-68eb-4b7c-9088-dea729305a93",
+		"_postman_id": "0bc74997-7a9f-439b-bc07-95010e7be773",
 		"name": "Checkin",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -119,6 +119,42 @@
 						"api",
 						"checkins",
 						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Collection  checkins",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{bearer_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://beer.localhost/api/checkins?page=1&limit=10",
+					"protocol": "http",
+					"host": [
+						"beer",
+						"localhost"
+					],
+					"path": [
+						"api",
+						"checkins"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						}
 					]
 				}
 			},

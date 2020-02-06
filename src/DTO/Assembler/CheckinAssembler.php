@@ -72,10 +72,6 @@ class CheckinAssembler
             throw new BadRequestHttpException('Need value integer for note between 0 to 10');
         }
 
-        if ($checkin->getUser()->getId() == $this->storage->getToken()->getUser()->getId()) {
-            throw new AccessDeniedException('Not allowed to update checkins other member');
-        }
-
         $checkin->setNote($checkinDTO->getNote());
         $checkin->setUpdatedAt(new \DateTime());
 

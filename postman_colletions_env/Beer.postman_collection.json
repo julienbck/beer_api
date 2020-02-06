@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "6a67bd49-174a-4ba4-8f1b-0d66c97556bd",
+		"_postman_id": "759959d9-68c3-4252-bab4-fe1cb097b0d1",
 		"name": "Beer",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -88,7 +88,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://beer.localhost/api/beers/filter/max?",
+					"raw": "http://beer.localhost/api/beers/ranking/max?",
 					"protocol": "http",
 					"host": [
 						"beer",
@@ -97,7 +97,7 @@
 					"path": [
 						"api",
 						"beers",
-						"filter",
+						"ranking",
 						"max"
 					],
 					"query": [

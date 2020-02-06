@@ -14,7 +14,18 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use App\Common\QueryAnnotation;
+use Swagger\Annotations as SWG;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use Nelmio\ApiDocBundle\Annotation\Model;
 
+
+/**
+ * Class BreweryController
+ * @package App\Controller\Rest
+ *
+ * @SWG\Tag(name="Breweries")
+ * @Security(name="Bearer")
+ */
 class BreweryController extends AbstractRestController
 {
     /**
@@ -35,6 +46,14 @@ class BreweryController extends AbstractRestController
     }
 
     /**
+     * @SWG\Response(
+     *     response=200,
+     *     description="Return collection of breweries",
+     *     @Model(type=Brewery::class)
+     * )
+     * @SWG\Parameter(name="page", in="query", type="integer", description="Page to paginate result. Totalpage in response header")
+     * @SWG\Parameter(name="limit", in="query", type="integer", description="limit elements by page")
+     *
      * @Route("/breweries", name="get_breweries", methods={"GET"})
      * @param Request $request
      * @return Response
@@ -60,6 +79,12 @@ class BreweryController extends AbstractRestController
     }
 
     /**
+     * @SWG\Response(
+     *     response=200,
+     *     description="Return brewery",
+     *     @Model(type=Brewery::class)
+     * )
+     *
      * @Route("/breweries/{id}", name="get_brewery", methods={"GET"})
      * @param Request $request
      * @return Response
@@ -73,6 +98,26 @@ class BreweryController extends AbstractRestController
     }
 
     /**
+     * @SWG\Response(
+     *     response=201,
+     *     description="Create brewery",
+     * )
+     * @SWG\Parameter(name="body", in="body", description="Elements needed to create brewery", type="json", required=true,
+     *      @SWG\Schema(
+     *          type="object",
+     *          @SWG\Property(property="name", type="string", example="Brasseur Leon"
+     *          ),
+     *          @SWG\Property(property="city", type="string", example="Bruxelles (not required)"
+     *          ),
+     *          @SWG\Property(property="postal_code", type="string", example="22670 (not required)"
+     *          ),
+     *          @SWG\Property(property="country", type="string", example="BELGIUM (not required)"
+     *          ),
+     *          @SWG\Property(property="address", type="string", example="2 place Lille (not required)"
+     *          ),
+     *       )
+     *     )
+     *
      * @Route("/breweries", name="post_breweries", methods={"POST"})
      * @param Request $request
      * @return JsonResponse
@@ -86,6 +131,26 @@ class BreweryController extends AbstractRestController
 
 
     /**
+     * @SWG\Response(
+     *     response=204,
+     *     description="Update brewery",
+     * )
+     * @SWG\Parameter(name="body", in="body", description="Elements to update brewery", type="json", required=true,
+     *      @SWG\Schema(
+     *          type="object",
+     *          @SWG\Property(property="name", type="string", example="Brasseur Leon"
+     *          ),
+     *          @SWG\Property(property="city", type="string", example="Bruxelles"
+     *          ),
+     *          @SWG\Property(property="postal_code", type="string", example="22670"
+     *          ),
+     *          @SWG\Property(property="country", type="string", example="BELGIUM"
+     *          ),
+     *          @SWG\Property(property="address", type="string", example="2 place Lille"
+     *          ),
+     *       )
+     *     )
+     *
      * @Route("/breweries/{id}", name="patch_brewery", methods={"PATCH"}, requirements={"id"="\d+"})
      * @param Request $request
      * @return Response
@@ -108,6 +173,11 @@ class BreweryController extends AbstractRestController
 
 
     /**
+     * @SWG\Response(
+     *     response=204,
+     *     description="Delete beer",
+     * )
+     *
      * @Route("/breweries/{id}", name="delete_brewery", methods={"DELETE"}, requirements={"id"="\d+"})
      * @param Request $request
      * @return Response
@@ -126,6 +196,12 @@ class BreweryController extends AbstractRestController
     }
 
     /**
+     * @SWG\Response(
+     *     response=200,
+     *     description="Return number breweries by country",
+     * )
+     * @SWG\Parameter(name="sort", in="query", type="string", description="sort by ASC|DESC. Value need full uppercase")
+     *
      * @Route("/breweries/country/counter", name="get_country_brewery", methods={"get"})
      * @param Request $request
      * @return Response

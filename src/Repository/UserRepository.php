@@ -35,8 +35,8 @@ class UserRepository extends ServiceEntityRepository
 
         $qb
             ->addSelect('c, b')
-            ->join('u.checkins', 'c')
-            ->join('c.beer', 'b')
+            ->leftJoin('u.checkins', 'c')
+            ->leftJoin('c.beer', 'b')
             ->where('u.id = :id')
             ->setParameter('id', $id);
 

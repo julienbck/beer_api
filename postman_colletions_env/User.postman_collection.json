@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "af9069c1-57f1-47f4-ba8b-68db26082b7d",
+		"_postman_id": "72624ccb-39f4-4b56-b88f-f55f8d1f1958",
 		"name": "User",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -108,6 +108,33 @@
 						"api",
 						"user",
 						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{bearer_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://beer.localhost/api/user/3",
+					"protocol": "http",
+					"host": [
+						"beer",
+						"localhost"
+					],
+					"path": [
+						"api",
+						"user",
+						"3"
 					]
 				}
 			},

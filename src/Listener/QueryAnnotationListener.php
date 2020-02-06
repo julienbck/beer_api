@@ -7,6 +7,7 @@ namespace App\Listener;
 use App\Common\QueryParamValidator;
 use App\Controller\Rest\AbstractRestController;
 use Doctrine\Common\Annotations\Reader;
+use Nelmio\ApiDocBundle\Controller\SwaggerUiController;
 use Symfony\Component\HttpKernel\Controller\ErrorController;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 
@@ -33,7 +34,7 @@ class QueryAnnotationListener
     public function onKernelController(ControllerEvent $event)
     {
         $controller = $event->getController();
-        if(!$controller instanceof ErrorController) {
+        if(!$controller instanceof ErrorController && !$controller instanceof SwaggerUiController) {
             $reflecClass = new \ReflectionClass($controller[0]);
 
             if ($reflecClass->isSubclassOf(AbstractRestController::class)) {

@@ -28,7 +28,7 @@ class CheckinRepository extends ServiceEntityRepository
             ->join('ci.user', 'u')
             ->orderBy('ci.id', 'ASC');
 
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery();
     }
 
     public function getOneById($id)
