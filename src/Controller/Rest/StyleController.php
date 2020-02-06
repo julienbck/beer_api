@@ -102,6 +102,13 @@ class StyleController extends AbstractRestController
      *     response=201,
      *     description="Create style",
      * )
+     * @SWG\Parameter(name="body", in="body", description="Elements needed to create style", type="json", required=true,
+     *      @SWG\Schema(
+     *          type="object",
+     *          @SWG\Property(property="name", type="string", example="Gold beer belgium GBB"
+     *          ),
+     *       )
+     *     )
      *
      * @Route("/styles", name="post_styles", methods={"POST"})
      * @param Request $request
@@ -119,6 +126,13 @@ class StyleController extends AbstractRestController
      *     response=204,
      *     description="Update style",
      * )
+     * @SWG\Parameter(name="body", in="body", description="Elements to update style", type="json", required=true,
+     *      @SWG\Schema(
+     *          type="object",
+     *          @SWG\Property(property="name", type="string", example="Gold beer belgium GBB"
+     *          ),
+     *       )
+     *     )
      *
      * @Route("/styles/{id}", name="patch_styles", methods={"PATCH"})
      * @param Request $request

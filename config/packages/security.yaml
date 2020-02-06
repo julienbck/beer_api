@@ -11,6 +11,10 @@ security:
             pattern: ^/api/user/register
             security: false
 
+        apidoc:
+            pattern: ^/api/doc
+            security: false
+
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false

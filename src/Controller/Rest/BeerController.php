@@ -108,6 +108,21 @@ class BeerController extends AbstractRestController
      *     response=201,
      *     description="Create beer",
      * )
+     * @SWG\Parameter(name="body", in="body", description="Elements needed to create beer", type="json", required=true,
+     *      @SWG\Schema(
+     *          type="object",
+     *          @SWG\Property(property="name", type="string", example="Jupiler"
+     *          ),
+     *          @SWG\Property(property="abv", type="integer", example="55"
+     *          ),
+     *          @SWG\Property(property="ibu", type="integer", example="34"
+     *          ),
+     *          @SWG\Property(property="brewery_id", type="integer", example="55 (not required)"
+     *          ),
+     *          @SWG\Property(property="style_id", type="integer", example="55 (not required)"
+     *          ),
+     *       )
+     *     )
      *
      * @Route("/beers", name="post_beer", methods={"POST"})
      * @param Request $request
@@ -125,6 +140,22 @@ class BeerController extends AbstractRestController
      *     response=204,
      *     description="Update beer",
      * )
+     * @SWG\Parameter(name="body", in="body", description="Elements to update beer", type="json", required=true,
+     *      @SWG\Schema(
+     *          type="object",
+     *          @SWG\Property(property="name", type="string", example="Jupiler"
+     *          ),
+     *          @SWG\Property(property="abv", type="integer", example="55"
+     *          ),
+     *          @SWG\Property(property="ibu", type="integer", example="34"
+     *          ),
+     *          @SWG\Property(property="brewery_id", type="integer", example="55"
+     *          ),
+     *          @SWG\Property(property="style_id", type="integer", example="55"
+     *          ),
+     *       )
+     *     )
+     *
      * @Route("/beers/{id}", name="patch_beer", methods={"PATCH"}, requirements={"id"="\d+"})
      * @param Request $request
      * @return Response

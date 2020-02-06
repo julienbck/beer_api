@@ -102,6 +102,21 @@ class BreweryController extends AbstractRestController
      *     response=201,
      *     description="Create brewery",
      * )
+     * @SWG\Parameter(name="body", in="body", description="Elements needed to create brewery", type="json", required=true,
+     *      @SWG\Schema(
+     *          type="object",
+     *          @SWG\Property(property="name", type="string", example="Brasseur Leon"
+     *          ),
+     *          @SWG\Property(property="city", type="string", example="Bruxelles (not required)"
+     *          ),
+     *          @SWG\Property(property="postal_code", type="string", example="22670 (not required)"
+     *          ),
+     *          @SWG\Property(property="country", type="string", example="BELGIUM (not required)"
+     *          ),
+     *          @SWG\Property(property="address", type="string", example="2 place Lille (not required)"
+     *          ),
+     *       )
+     *     )
      *
      * @Route("/breweries", name="post_breweries", methods={"POST"})
      * @param Request $request
@@ -120,6 +135,21 @@ class BreweryController extends AbstractRestController
      *     response=204,
      *     description="Update brewery",
      * )
+     * @SWG\Parameter(name="body", in="body", description="Elements to update brewery", type="json", required=true,
+     *      @SWG\Schema(
+     *          type="object",
+     *          @SWG\Property(property="name", type="string", example="Brasseur Leon"
+     *          ),
+     *          @SWG\Property(property="city", type="string", example="Bruxelles"
+     *          ),
+     *          @SWG\Property(property="postal_code", type="string", example="22670"
+     *          ),
+     *          @SWG\Property(property="country", type="string", example="BELGIUM"
+     *          ),
+     *          @SWG\Property(property="address", type="string", example="2 place Lille"
+     *          ),
+     *       )
+     *     )
      *
      * @Route("/breweries/{id}", name="patch_brewery", methods={"PATCH"}, requirements={"id"="\d+"})
      * @param Request $request

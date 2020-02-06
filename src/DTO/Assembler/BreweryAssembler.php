@@ -55,7 +55,8 @@ class BreweryAssembler
         }
 
         if (!is_null($breweryDTO->getCountry())) {
-            $brewery->setCountry($breweryDTO->getCountry());
+            //convert into uppercase
+            $brewery->setCountry(strtoupper($breweryDTO->getCountry()));
         }
 
         $brewery->setUpdatedAt(new \DateTime());

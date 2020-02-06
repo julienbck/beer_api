@@ -76,6 +76,19 @@ class UserController extends AbstractRestController
      *     response=201,
      *     description="Create user",
      * )
+     * @SWG\Parameter(name="body", in="body", description="Elements to update user", type="json", required=true,
+     *      @SWG\Schema(
+     *          type="object",
+     *          @SWG\Property(property="username", type="string", example="gerard"
+     *          ),
+     *          @SWG\Property(property="password", type="string", example="monpa55w0rd!"
+     *          ),
+     *          @SWG\Property(property="email", type="email", example="beer@checkin.fr"
+     *          ),
+     *          @SWG\Property(property="avatar", type="string", example="http://google.com/image.jpg"
+     *          ),
+     *       )
+     *     )
      *
      * @Route("/user/register", name="create_user", methods={"POST"})
      * @param Request $request
@@ -93,6 +106,15 @@ class UserController extends AbstractRestController
      *     response=201,
      *     description="Update user",
      * )
+     * @SWG\Parameter(name="body", in="body", description="Elements to update user", type="json", required=true,
+     *      @SWG\Schema(
+     *          type="object",
+     *          @SWG\Property(property="email", type="email", example="beer@checkin.fr"
+     *          ),
+     *          @SWG\Property(property="avatar", type="string", example="http://google.com/image.jpg"
+     *          ),
+     *       )
+     *     )
      *
      * @Route("/user/{id}", name="patch_user", methods={"PATCH"}, requirements={"id"="\d+"})
      * @param Request $request

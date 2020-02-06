@@ -106,10 +106,20 @@ class CheckinController extends AbstractRestController
      *     response=201,
      *     description="Create checkin",
      * )
+     * @SWG\Parameter(name="body", in="body", description="Elements needed to create checkin", type="json", required=true,
+     *      @SWG\Schema(
+     *          type="object",
+     *          @SWG\Property(property="note", type="float", example="5.2"
+     *          ),
+     *          @SWG\Property(property="brewery_id", type="integer", example="55"
+     *          ),
+     *       )
+     *     )
      *
      * @Route("/checkins", name="post_checkins", methods={"POST"})
      * @param Request $request
      * @return Response
+     * @throws \ErrorException
      */
     public function post(Request $request) :Response
     {
@@ -128,6 +138,13 @@ class CheckinController extends AbstractRestController
      *     response=204,
      *     description="Update checkin",
      * )
+     * @SWG\Parameter(name="body", in="body", description="Elements to update checkin", type="json", required=true,
+     *      @SWG\Schema(
+     *          type="object",
+     *          @SWG\Property(property="note", type="float", example="5.2"
+     *          ),
+     *       )
+     *     )
      *
      * @Route("/checkins/{id}", name="patch_checkin", methods={"PATCH"}, requirements={"id"="\d+"})
      * @param Request $request
